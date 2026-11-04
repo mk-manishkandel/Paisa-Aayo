@@ -1,5 +1,6 @@
 package io.github.mkmanishkandel.paisaaayo.ui.components
 
+import androidx.compose.ui.res.painterResource
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -54,6 +55,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.github.mkmanishkandel.paisaaayo.R
 import io.github.mkmanishkandel.paisaaayo.data.PaymentEntity
+import io.github.mkmanishkandel.paisaaayo.parser.Money
 import io.github.mkmanishkandel.paisaaayo.parser.Direction
 import io.github.mkmanishkandel.paisaaayo.ui.Format
 import io.github.mkmanishkandel.paisaaayo.ui.theme.LocalNepali
@@ -171,7 +173,8 @@ fun PaymentRow(payment: PaymentEntity, modifier: Modifier = Modifier) {
     val time = Format.time(payment.timestamp, nepali)
     val description = stringResource(
         if (credit) R.string.cd_credit else R.string.cd_debit,
-        Format.number(payment.amountPaisa / 100, nepali), payment.sourceLabel, time,
+        // Keep the paisa so screen readers say "175.50", not "175".
+        Money.format(payment.amountPaisa, devanagariDigits = nepali), payment.sourceLabel, time,
     )
     Row(
         modifier = modifier
@@ -212,15 +215,13 @@ fun PaymentRow(payment: PaymentEntity, modifier: Modifier = Modifier) {
 }
 
 /**
- * Brand hero: a gold coin with sound rings rippling out — "the phone speaks when money arrives".
- * Rings are static under reduced motion.
+ * Brand hero: the Paisa Aayo mark (a speech bubble saying "रु") with sound rings rippling out,
+ * "the phone speaks when money arrives". Rings are static under reduced motion.
  */
 @Composable
 fun HeroCoin(modifier: Modifier = Modifier, size: Dp = 180.dp) {
     val reduced = LocalReducedMotion.current
     val gold = MaterialTheme.colorScheme.primary
-    val goldSoft = MaterialTheme.colorScheme.secondary
-    val ink = MaterialTheme.colorScheme.onPrimary
     val transition = rememberInfiniteTransition(label = "hero")
     val t by transition.animateFloat(
         initialValue = 0f,
@@ -228,23 +229,22 @@ fun HeroCoin(modifier: Modifier = Modifier, size: Dp = 180.dp) {
         animationSpec = infiniteRepeatable(tween(2400, easing = FastOutSlowInEasing), RepeatMode.Restart),
         label = "rings",
     )
-    Canvas(modifier.size(size)) {
-        val c = Offset(this.size.width / 2, this.size.height / 2)
-        val coinR = this.size.minDimension * 0.24f
-        for (i in 0..2) {
-            val phase = (t + i / 3f) % 1f
-            val r = coinR + (this.size.minDimension / 2 - coinR) * phase
-            drawCircle(gold.copy(alpha = (1f - phase) * 0.5f), radius = r, center = c, style = Stroke(width = 3.dp.toPx()))
+    Box(modifier.size(size), contentAlignment = Alignment.Center) {
+        Canvas(Modifier.matchParentSize()) {
+            val c = Offset(this.size.width / 2, this.size.height / 2)
+            val inner = this.size.minDimension * 0.3f
+            for (i in 0..2) {
+                val phase = (t + i / 3f) % 1f
+                val r = inner + (this.size.minDimension / 2 - inner) * phase
+                drawCircle(gold.copy(alpha = (1f - phase) * 0.45f), radius = r, center = c, style = Stroke(width = 2.dp.toPx()))
+            }
         }
-        drawCircle(gold, radius = coinR, center = c)
-        drawCircle(goldSoft, radius = coinR * 0.78f, center = c)
-        // Stylised rupee: two bars and a diagonal stroke.
-        val w = coinR * 0.75f
-        val left = c.x - w / 2
-        val stroke = coinR * 0.13f
-        drawLine(ink, Offset(left, c.y - coinR * 0.3f), Offset(left + w, c.y - coinR * 0.3f), stroke, StrokeCap.Round)
-        drawLine(ink, Offset(left, c.y - coinR * 0.02f), Offset(left + w, c.y - coinR * 0.02f), stroke, StrokeCap.Round)
-        drawLine(ink, Offset(left + w * 0.2f, c.y + coinR * 0.15f), Offset(left + w * 0.8f, c.y + coinR * 0.55f), stroke, StrokeCap.Round)
+        Icon(
+            painterResource(R.drawable.ic_brand_mark),
+            contentDescription = null,
+            tint = gold,
+            modifier = Modifier.size(size * 0.46f),
+        )
     }
 }
 

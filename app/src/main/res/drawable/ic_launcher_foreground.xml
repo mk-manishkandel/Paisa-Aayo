@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Paisa Aayo mark: a speech bubble saying "रु". Source: docs/brand/mark.svg -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <!-- coin -->
-    <path android:fillColor="#F59E0B"
-        android:pathData="M46,54m-18,0a18,18 0,1 1,36 0a18,18 0,1 1,-36 0" />
-    <path android:fillColor="#FBBF24"
-        android:pathData="M46,54m-13,0a13,13 0,1 1,26 0a13,13 0,1 1,-26 0" />
-    <!-- rupee mark: two bars + diagonal -->
-    <path android:fillColor="#0F172A" android:pathData="M39,46h14v3h-14z" />
-    <path android:fillColor="#0F172A" android:pathData="M39,51h14v3h-14z" />
-    <path android:fillColor="#0F172A" android:pathData="M42,55.5h3.6l8,9.5h-4.2z" />
-    <!-- sound waves -->
-    <path android:strokeColor="#F59E0B" android:strokeWidth="3.5" android:strokeLineCap="round"
-        android:fillColor="#00000000"
-        android:pathData="M70,44a14,14 0,0 1,0 20" />
-    <path android:strokeColor="#F59E0B" android:strokeWidth="3.5" android:strokeLineCap="round"
-        android:fillColor="#00000000" android:strokeAlpha="0.6"
-        android:pathData="M76,38a22,22 0,0 1,0 32" />
+    <path android:fillColor="#F59E0B" android:pathData="M32.5 52C32.5 39.57 42.57 29.5 55 29.5C67.43 29.5 77.5 39.57 77.5 52C77.5 64.43 67.43 74.5 55 74.5C51.33 74.5 47.87 73.62 44.81 72.06Q37.9 76 30 76C32.64 72.98 35 69.68 36.64 65.01C34.03 61.34 32.5 56.85 32.5 52ZM67.03 53.91Q67.03 51.04 65.32 49.35Q63.6 47.66 60.49 47.66Q59.13 47.66 58.02 47.98Q57.99 46.69 57.74 45.77Q57.65 45.44 57.55 45.13H68.86V40.25H42.34V45.13H51.5Q51.54 45.25 51.58 45.37Q51.86 46.32 51.86 47.44Q51.86 48.88 51.16 49.83Q50.85 50.25 50.36 50.64Q49.89 50.24 49.43 49.93Q48.2 49.11 46.7 49.11Q45.28 49.11 44.4 49.91Q43.52 50.71 43.52 52.08Q43.52 53.07 43.95 54.09Q44.38 55.12 45.27 56.37Q46.72 58.35 49.1 60.7Q51.48 63.05 54.68 65.75L58.93 61.82Q57.44 60.66 56.07 59.57Q54.7 58.48 53.44 57.36Q52.68 56.7 51.94 56.01Q53.54 55.38 54.78 54.49Q55.47 54.01 56.02 53.43Q56.6 53.01 57.12 52.79Q57.92 52.44 58.77 52.44Q59.8 52.44 60.3 52.95Q60.79 53.47 60.79 54.36Q60.79 55.21 60.18 56.09Q59.57 56.97 58.6 57.75L63.4 60.94Q65.31 59.31 66.17 57.58Q67.03 55.85 67.03 53.91Z" />
 </vector>

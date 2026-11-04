@@ -1,7 +1,7 @@
 package io.github.mkmanishkandel.paisaaayo.ui.settings
 
 import android.content.Intent
-import android.net.Uri
+import androidx.core.net.toUri
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
@@ -239,10 +239,10 @@ fun SettingsScreen(
                 Section(stringResource(R.string.settings_section_about)) {
                     NavRow(Icons.Rounded.WifiOff, stringResource(R.string.settings_no_internet), null, chevron = false) {}
                     NavRow(Icons.Rounded.Code, stringResource(R.string.settings_source_code), null) {
-                        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(REPO_URL))) }
+                        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, REPO_URL.toUri())) }
                     }
                     NavRow(Icons.Rounded.Gavel, stringResource(R.string.settings_license), null) {
-                        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("$REPO_URL/blob/main/LICENSE"))) }
+                        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, "$REPO_URL/blob/main/LICENSE".toUri())) }
                     }
                     NavRow(Icons.Rounded.RestartAlt, stringResource(R.string.settings_rerun_setup), null, onClick = onRerunSetup)
                     NavRow(Icons.Rounded.Info, stringResource(R.string.settings_version, BuildConfig.VERSION_NAME), null, chevron = false) {}

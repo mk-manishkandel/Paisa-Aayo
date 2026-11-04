@@ -160,8 +160,8 @@ class Announcer(context: Context) {
     private fun selectVoice(engine: TextToSpeech, language: SpeechLanguage): Boolean {
         val candidates = when (language) {
             // Hindi voices read Devanagari Nepali well enough when no Nepali voice is installed.
-            SpeechLanguage.NEPALI -> listOf(Locale("ne", "NP"), Locale("ne"), Locale("hi", "IN"))
-            SpeechLanguage.ENGLISH -> listOf(Locale("en", "IN"), Locale.UK, Locale.US)
+            SpeechLanguage.NEPALI -> listOf(Locale.forLanguageTag("ne-NP"), Locale.forLanguageTag("ne"), Locale.forLanguageTag("hi-IN"))
+            SpeechLanguage.ENGLISH -> listOf(Locale.forLanguageTag("en-IN"), Locale.UK, Locale.US)
         }
         for (locale in candidates) {
             val availability = runCatching { engine.isLanguageAvailable(locale) }.getOrDefault(TextToSpeech.LANG_NOT_SUPPORTED)

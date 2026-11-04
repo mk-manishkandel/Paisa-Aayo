@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/brand/banner.png" alt="Paisa Aayo · पैसा आयो" width="720"></p>
+
 # Paisa Aayo · पैसा आयो
 
 **A free, open-source payment speaker for Android.** Your phone reads out every payment you
@@ -12,6 +14,20 @@ It's a "soundbox" for shops, with no extra hardware.
 - **Guided first-run setup**: language, permissions, battery, then a test announcement
 - **Robust**: scam/promo/OTP filtering, de-duplication, a watchdog that re-binds the listener
 - **Optional app lock** (fingerprint / face / screen lock) and a local payment statement
+
+## Screenshots
+
+| Home | History | Settings | Setup |
+|---|---|---|---|
+| <img src="docs/screenshots/home.png" width="200" alt="Home: listening status, today's total and recent payments"> | <img src="docs/screenshots/history.png" width="200" alt="History with filters and money in/out totals"> | <img src="docs/screenshots/settings.png" width="200" alt="Settings: language and announcements"> | <img src="docs/screenshots/welcome.png" width="200" alt="First-run welcome screen"> |
+
+**नेपालीमा**
+
+| गृहपृष्ठ | इतिहास | सेटिङ |
+|---|---|---|
+| <img src="docs/screenshots/home-ne.png" width="200" alt="Home in Nepali with Devanagari digits"> | <img src="docs/screenshots/history-ne.png" width="200" alt="History in Nepali"> | <img src="docs/screenshots/settings-ne.png" width="200" alt="Settings in Nepali"> |
+
+<sub>Captured from the debug build on an Android 15 emulator with sample payments.</sub>
 
 ## Install
 
