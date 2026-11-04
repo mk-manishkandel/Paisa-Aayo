@@ -17,9 +17,28 @@ data class NotificationSnapshot(
     val input: NotificationInput,
     val textHash: Int,
     val appInfo: ApplicationInfo?,
+    /** Android 15+ replaced the content because it looked like it held a one-time code. */
+    val redacted: Boolean = false,
 )
 
 object NotificationExtractor {
+
+    /**
+     * Android 15+ hides notifications that look like they contain a code (an OTP, but also many
+     * 6–8 character transaction IDs) from listeners like ours, replacing the text with this
+     * system string. We can't read those; we can only notice that it happened.
+     */
+    private val redactedMessages: Set<String> by lazy {
+        val system = runCatching {
+            val res = android.content.res.Resources.getSystem()
+            @android.annotation.SuppressLint("DiscouragedApi") // No public constant exists for this string.
+            val id = res.getIdentifier("redacted_notification_message", "string", "android")
+            if (id != 0) res.getString(id) else null
+        }.getOrNull()
+        setOfNotNull(system, "Sensitive notification content hidden")
+    }
+
+    fun isRedacted(body: String): Boolean = body.trim() in redactedMessages
 
     fun extract(sbn: StatusBarNotification): NotificationSnapshot? {
         val n = sbn.notification ?: return null
@@ -68,6 +87,7 @@ object NotificationExtractor {
             input = NotificationInput(sbn.packageName, title, body, senders),
             textHash = (title + body).hashCode(),
             appInfo = appInfo,
+            redacted = isRedacted(body),
         )
     }
 

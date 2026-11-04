@@ -67,6 +67,34 @@ class SpeechAndMoneyTest {
         assertFalse(d.checkAndRecord("k3", 3, "sms", ParseResult.Payment(10_000, Direction.CREDIT, null), 120_000))
     }
 
+    @Test fun dedupKeepsSameAmountFromTwoWalletsWithDifferentRefs() {
+        // Two customers pay Rs 100 within seconds, one on eSewa and one on Khalti.
+        val d = Deduplicator()
+        assertFalse(d.checkAndRecord("k1", 1, "com.f1soft.esewa", ParseResult.Payment(10_000, Direction.CREDIT, "111111111"), 0))
+        assertFalse(d.checkAndRecord("k2", 2, "com.khalti", ParseResult.Payment(10_000, Direction.CREDIT, "222222222"), 10_000))
+    }
+
+    @Test fun dedupWalletAndBankSmsWithDifferentRefsIsOnePayment() {
+        // The bank SMS for a wallet payment usually carries its own reference.
+        val d = Deduplicator()
+        assertFalse(d.checkAndRecord("k1", 1, "com.f1soft.esewa", ParseResult.Payment(10_000, Direction.CREDIT, "111111111"), 0))
+        assertTrue(d.checkAndRecord("k2", 2, "com.google.android.apps.messaging", ParseResult.Payment(10_000, Direction.CREDIT, "999999999"), 10_000))
+    }
+
+    @Test fun otherPaisaAayoBuildsAreIgnored() {
+        val r = PaymentParser.parse(
+            NotificationInput("io.github.mkmanishkandel.paisaaayo.debug", "Paisa Aayo", "You have received Rs 500.00 from Paisa Aayo test.", emptyList()),
+        )
+        assertEquals(ParseResult.Ignored(IgnoreReason.BLOCKED_APP), r)
+    }
+
+    @Test fun knownPaymentApps() {
+        assertTrue(Sources.isKnownPaymentApp("com.f1soft.esewa"))
+        assertTrue(Sources.isKnownPaymentApp("com.khalti"))
+        assertFalse(Sources.isKnownPaymentApp("com.android.shell"))
+        assertFalse(Sources.isKnownPaymentApp("com.google.android.apps.messaging"))
+    }
+
     @Test fun dedupRepost() {
         val d = Deduplicator()
         val p = ParseResult.Payment(10_000, Direction.CREDIT, null)

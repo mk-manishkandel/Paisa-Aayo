@@ -58,6 +58,9 @@
     <string name="home_empty_title">अहिलेसम्म कुनै भुक्तानी छैन</string>
     <string name="home_empty_body">पैसा आएपछि यहाँ देखिन्छ र ठूलो स्वरमा सुनाइन्छ।</string>
     <string name="home_test">आवाज परीक्षण</string>
+    <string name="home_hidden_title">%1$s जाँच गर्नुहोस्</string>
+    <string name="home_hidden_body">%2$s मा आएको %1$s को सूचना एन्ड्रोइडले लुकायो, त्यसैले पैसा आयोले पढ्न सकेन। कोड जस्तो देखिने सूचना एन्ड्रोइड १५ ले लुकाउँछ। भुक्तानी थियो भने त्यो सुनाइएन।</string>
+    <string name="home_hidden_dismiss">बुझें</string>
     <string name="nav_settings">सेटिङ</string>
     <string name="nav_history">इतिहास</string>
 

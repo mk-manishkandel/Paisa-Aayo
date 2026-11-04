@@ -44,6 +44,7 @@ import io.github.mkmanishkandel.paisaaayo.container
 import io.github.mkmanishkandel.paisaaayo.data.PaymentEntity
 import io.github.mkmanishkandel.paisaaayo.parser.Direction
 import io.github.mkmanishkandel.paisaaayo.ui.Format
+import io.github.mkmanishkandel.paisaaayo.ui.rememberStartOfToday
 import io.github.mkmanishkandel.paisaaayo.ui.components.EmptyState
 import io.github.mkmanishkandel.paisaaayo.ui.components.PaisaCard
 import io.github.mkmanishkandel.paisaaayo.ui.components.PaymentRow
@@ -74,7 +75,8 @@ fun HistoryScreen(onBack: () -> Unit) {
     var range by rememberSaveable { mutableStateOf(Range.WEEK) }
     var type by rememberSaveable { mutableStateOf(TypeFilter.ALL) }
 
-    val from = remember(range) { range.daysAgo?.let { Format.startOfDay(daysAgo = it) } ?: 0L }
+    val today = rememberStartOfToday()
+    val from = remember(range, today) { range.daysAgo?.let { Format.startOfDay(today, daysAgo = it) } ?: 0L }
     val all by remember(from) { context.container.database.payments().since(from) }.collectAsStateWithLifecycle(emptyList())
     val payments = remember(all, type) {
         when (type) {
@@ -86,8 +88,7 @@ fun HistoryScreen(onBack: () -> Unit) {
     val totalIn = remember(all) { all.filter { it.direction == Direction.CREDIT.name && !it.isTest }.sumOf { it.amountPaisa } }
     val totalOut = remember(all) { all.filter { it.direction == Direction.DEBIT.name && !it.isTest }.sumOf { it.amountPaisa } }
     val byDay: Map<Long, List<PaymentEntity>> = remember(payments) { payments.groupBy { Format.startOfDay(it.timestamp) } }
-    val today = remember { Format.startOfDay() }
-    val yesterday = remember { Format.startOfDay(daysAgo = 1) }
+    val yesterday = remember(today) { Format.startOfDay(today, daysAgo = 1) }
 
     Scaffold(
         topBar = {

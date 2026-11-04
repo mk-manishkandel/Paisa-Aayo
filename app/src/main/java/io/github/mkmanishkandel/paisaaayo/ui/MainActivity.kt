@@ -5,6 +5,7 @@ import android.view.WindowManager
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
@@ -89,8 +90,8 @@ class MainActivity : AppCompatActivity() {
             PaisaAayoTheme(nepali = AppLanguage.isNepali(this, current)) {
                 Surface(color = MaterialTheme.colorScheme.background, modifier = Modifier.fillMaxSize()) {
                     if (current.appLock && !unlocked) {
-                        LockScreen(onUnlock = { authenticate { unlocked = true } })
-                        LaunchedEffect(Unit) { authenticate { unlocked = true } }
+                        LockScreen(onUnlock = ::unlock)
+                        LaunchedEffect(Unit) { unlock() }
                     } else {
                         AppNavigation(current)
                     }
@@ -144,6 +145,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Opens the app lock. If the phone no longer has any screen lock (the user removed it, which
+     * itself needs the old PIN), there is nothing to check against: turn the app lock off instead
+     * of locking the owner out of their own payment history.
+     */
+    private fun unlock() {
+        val status = BiometricManager.from(this).canAuthenticate(BIOMETRIC_WEAK or DEVICE_CREDENTIAL)
+        if (status in NO_LOCK_POSSIBLE) {
+            unlocked = true
+            lifecycleScope.launch { container.settings.setAppLock(false) }
+        } else {
+            authenticate { unlocked = true }
+        }
+    }
+
     /** Biometric or screen-lock (PIN/pattern/password) confirmation. */
     private fun authenticate(onSuccess: () -> Unit) {
         val prompt = BiometricPrompt(
@@ -177,6 +193,11 @@ class MainActivity : AppCompatActivity() {
 
     private companion object {
         const val KEY_UNLOCKED = "unlocked"
+        val NO_LOCK_POSSIBLE = setOf(
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED,
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE,
+            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED,
+        )
     }
 }
 

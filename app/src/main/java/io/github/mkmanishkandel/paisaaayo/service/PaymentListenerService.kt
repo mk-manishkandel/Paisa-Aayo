@@ -16,6 +16,7 @@ import io.github.mkmanishkandel.paisaaayo.parser.ParseResult
 import io.github.mkmanishkandel.paisaaayo.parser.PaymentParser
 import io.github.mkmanishkandel.paisaaayo.parser.Sources
 import io.github.mkmanishkandel.paisaaayo.util.AppLanguage
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -34,16 +35,37 @@ import kotlinx.coroutines.launch
 class PaymentListenerService : NotificationListenerService() {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    private val queue = Channel<NotificationSnapshot>(capacity = 64, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    // Two stages so a slow or stuck voice can never delay (or drop) recording a payment:
+    // parsing + saving is fast; announcements wait their turn on their own queue.
+    private val queue = Channel<NotificationSnapshot>(capacity = 512, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val announcements = Channel<Announcement>(capacity = 32, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     private val dedup = Deduplicator()
     private var connected = false
 
     override fun onCreate() {
         super.onCreate()
-        // One consumer = payments are processed and announced strictly in arrival order.
+        // One consumer per stage, so payments are saved and announced strictly in arrival order.
         scope.launch {
             for (snapshot in queue) {
-                runCatching { handle(snapshot) }.onFailure { Log.e(TAG, "Failed to process notification", it) }
+                try {
+                    handle(snapshot)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to process notification", e)
+                }
+            }
+        }
+        scope.launch {
+            for (a in announcements) {
+                try {
+                    announce(this@PaymentListenerService, a.amountPaisa, a.direction, a.source, container.settings.settings.first())
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    Log.e(TAG, "Failed to announce", e)
+                }
             }
         }
         scope.launch {
@@ -77,6 +99,7 @@ class PaymentListenerService : NotificationListenerService() {
         ListenerState.set(false)
         scope.cancel()
         queue.close()
+        announcements.close()
         super.onDestroy()
     }
 
@@ -89,6 +112,10 @@ class PaymentListenerService : NotificationListenerService() {
         val isTest = snapshot.packageName == packageName
         if (isTest && snapshot.tag != TestPayment.TAG) return // our own keep-alive etc.
         if (!isTest && !isSourceAllowed(snapshot.packageName, settings)) return
+        if (snapshot.redacted) {
+            if (!isTest) noteHidden(snapshot)
+            return
+        }
 
         val input = if (isTest) snapshot.input.copy(packageName = TEST_PACKAGE) else snapshot.input
         val result = PaymentParser.parse(input)
@@ -119,7 +146,22 @@ class PaymentListenerService : NotificationListenerService() {
         )
 
         if (result.direction == Direction.DEBIT && !settings.announceDebits && !isTest) return
-        announce(this, result.amountPaisa, result.direction, label.takeIf { settings.announceSource && !isTest }, settings)
+        announcements.trySend(Announcement(result.amountPaisa, result.direction, label.takeIf { settings.announceSource && !isTest }))
+    }
+
+    private class Announcement(val amountPaisa: Long, val direction: Direction, val source: String?)
+
+    /**
+     * Android hid this notification's text. If it came from a payment app, remember it so Home can
+     * tell the shopkeeper to check that app. Hidden SMS are usually real OTPs, so they're skipped.
+     */
+    private suspend fun noteHidden(snapshot: NotificationSnapshot) {
+        val pkg = snapshot.packageName
+        if (Sources.isBlockedPackage(pkg) || Sources.isSmsApp(pkg)) return
+        if (!Sources.isKnownPaymentApp(pkg) && !container.database.payments().hasPaymentsFrom(pkg)) return
+        // The hidden copy carries Android's own app info, so name the app from its package instead.
+        val label = NotificationExtractor.sourceLabel(packageManager, snapshot.copy(appInfo = null))
+        container.settings.recordHidden(label, System.currentTimeMillis())
     }
 
     private fun isSourceAllowed(packageName: String, settings: Settings): Boolean {

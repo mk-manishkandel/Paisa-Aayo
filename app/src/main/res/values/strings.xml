@@ -62,6 +62,9 @@
     <string name="home_empty_title">No payments yet</string>
     <string name="home_empty_body">When money arrives, it shows up here and is announced aloud.</string>
     <string name="home_test">Test sound</string>
+    <string name="home_hidden_title">Check %1$s</string>
+    <string name="home_hidden_body">Android hid a %1$s notification at %2$s, so Paisa Aayo couldn\'t read it. Android 15 hides notifications that look like they contain a code. If it was a payment, it wasn\'t announced.</string>
+    <string name="home_hidden_dismiss">Got it</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_history">History</string>
 
