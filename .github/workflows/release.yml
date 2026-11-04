@@ -36,18 +36,21 @@ jobs:
           echo "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.jks"
           echo "PAISA_KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
 
-      - name: Build signed release APK
+      - name: Build signed APK (GitHub) and app bundle (Google Play)
         env:
           PAISA_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           PAISA_KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           PAISA_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
-          ./gradlew test assembleRelease --console=plain \
-            -PversionName="$VERSION" -PversionCode="${{ github.run_number }}"
+          # versionCode is derived from VERSION in app/build.gradle.kts (1.2.3 -> 10203).
+          ./gradlew test lintRelease assembleRelease bundleRelease --console=plain -PversionName="$VERSION"
           mkdir -p dist
           cp app/build/outputs/apk/release/app-release.apk "dist/PaisaAayo-$VERSION.apk"
-          (cd dist && sha256sum *.apk > SHA256SUMS.txt)
+          cp app/build/outputs/bundle/release/app-release.aab "dist/PaisaAayo-$VERSION.aab"
+          cp app/build/outputs/mapping/release/mapping.txt "dist/PaisaAayo-$VERSION-mapping.txt"
+          (cd dist && sha256sum *.apk *.aab > SHA256SUMS.txt)
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
 
       - name: Remove signing key
         if: always()
@@ -58,5 +61,27 @@ jobs:
         with:
           files: |
             dist/*.apk
+            dist/*.aab
+            dist/*-mapping.txt
             dist/SHA256SUMS.txt
           generate_release_notes: true
+
+      # Optional: add a PLAY_SERVICE_ACCOUNT_JSON secret (see docs/play/README.md) to also upload
+      # the bundle to Google Play's internal testing track. Skipped when the secret is absent.
+      - name: Check for Google Play credentials
+        id: play
+        env:
+          PLAY_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+        run: echo "enabled=$([ -n "$PLAY_JSON" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload to Google Play (internal testing)
+        if: steps.play.outputs.enabled == 'true'
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: io.github.mkmanishkandel.paisaaayo
+          releaseFiles: dist/PaisaAayo-${{ env.VERSION }}.aab
+          mappingFile: dist/PaisaAayo-${{ env.VERSION }}-mapping.txt
+          whatsNewDirectory: fastlane/metadata/android/whatsnew
+          track: internal
+          status: completed

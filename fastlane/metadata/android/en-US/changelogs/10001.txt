@@ -1,0 +1,1 @@
+First public release: payment announcements in Nepali and English, guided setup, payment history, app lock. No ads, no internet permission.
