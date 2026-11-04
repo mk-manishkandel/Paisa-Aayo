@@ -7,4 +7,6 @@
     <!-- Version bumps are handled deliberately (see CONTRIBUTING), not by failing lint. -->
     <issue id="GradleDependency" severity="informational" />
     <issue id="AndroidGradlePluginVersion" severity="informational" />
+    <!-- targetSdk moves only after on-device testing of the new platform behaviour. -->
+    <issue id="OldTargetApi" severity="informational" />
 </lint>

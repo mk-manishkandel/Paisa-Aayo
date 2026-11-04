@@ -17,12 +17,12 @@ object Format {
         if (nepali) Money.toDevanagari(value.toString()) else value.toString()
 
     fun time(millis: Long, nepali: Boolean): String {
-        val text = SimpleDateFormat("h:mm a", if (nepali) Locale("ne", "NP") else Locale.ENGLISH).format(Date(millis))
+        val text = SimpleDateFormat("h:mm a", if (nepali) Locale.forLanguageTag("ne-NP") else Locale.ENGLISH).format(Date(millis))
         return if (nepali) Money.toDevanagari(text) else text
     }
 
     fun day(millis: Long, nepali: Boolean): String {
-        val text = SimpleDateFormat("EEE, d MMM yyyy", if (nepali) Locale("ne", "NP") else Locale.ENGLISH).format(Date(millis))
+        val text = SimpleDateFormat("EEE, d MMM yyyy", if (nepali) Locale.forLanguageTag("ne-NP") else Locale.ENGLISH).format(Date(millis))
         return if (nepali) Money.toDevanagari(text) else text
     }
 

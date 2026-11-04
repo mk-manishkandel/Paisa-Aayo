@@ -5,9 +5,21 @@ updates:
     schedule:
       interval: weekly
     groups:
+      # Kotlin, KSP and the Android Gradle Plugin must move together; split PRs can't build.
+      build-toolchain:
+        patterns:
+          - "org.jetbrains.kotlin*"
+          - "com.google.devtools.ksp*"
+          - "com.android.*"
+          - "gradle-wrapper"
       androidx:
         patterns: ["androidx.*"]
+      kotlinx:
+        patterns: ["org.jetbrains.kotlinx*"]
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
