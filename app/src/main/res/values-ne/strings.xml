@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">पैसा आयो</string>
+    <string name="listener_label">पैसा आयो भुक्तानी सेवा</string>
+
+    <!-- Onboarding -->
+    <string name="onb_lang_title">आफ्नो भाषा छान्नुहोस्</string>
+    <string name="onb_lang_body">यसलाई सेटिङमा जुनसुकै बेला बदल्न सकिन्छ।</string>
+    <string name="onb_welcome_title">पैसा आयो!</string>
+    <string name="onb_welcome_body">eSewa, Khalti, Fonepay QR र बैंक SMS मा आएको हरेक भुक्तानी तपाईंको फोनले ठूलो स्वरमा सुनाउँछ।</string>
+    <string name="onb_point_offline_title">इन्टरनेट बिना चल्छ</string>
+    <string name="onb_point_offline_body">इन्टरनेट अनुमति छैन। तपाईंको भुक्तानी विवरण यो फोनबाहिर जाँदैन।</string>
+    <string name="onb_point_free_title">निःशुल्क र खुला स्रोत</string>
+    <string name="onb_point_free_body">विज्ञापन, खाता वा ट्र्याकिङ केही छैन।</string>
+    <string name="onb_point_voice_title">नेपाली र अंग्रेजीमा बोल्छ</string>
+    <string name="onb_point_voice_body">लाख र करोडसम्मको रकम पनि प्रस्ट सुनाउँछ।</string>
+    <string name="onb_access_title">सूचना पहुँच दिनुहोस्</string>
+    <string name="onb_access_body">पैसा कहिले आयो भनेर थाहा पाउन पैसा आयोले भुक्तानीका सूचना पढ्छ। च्याट, इमेल र सामाजिक एपहरू सधैं बेवास्ता गरिन्छन्।</string>
+    <string name="onb_access_steps">अर्को स्क्रिनमा पैसा आयो खोजेर खोल्नुहोस्।</string>
+    <string name="onb_access_button">सेटिङ खोल्नुहोस्</string>
+    <string name="onb_access_granted">पहुँच दिइयो</string>
+    <string name="onb_restricted_hint">स्विच खुलेन? App info खोल्नुहोस्, ⋮ मेनु थिच्नुहोस्, \"Allow restricted settings\" छान्नुहोस् र फेरि प्रयास गर्नुहोस्।</string>
+    <string name="onb_app_info_button">एप जानकारी खोल्नुहोस्</string>
+    <string name="onb_notify_title">सूचना अनुमति दिनुहोस्</string>
+    <string name="onb_notify_body">सानो, आवाजरहित सूचनाले पैसा आयोलाई पृष्ठभूमिमा चलिरहन मद्दत गर्छ।</string>
+    <string name="onb_notify_button">सूचना अनुमति दिनुहोस्</string>
+    <string name="onb_notify_granted">सूचना अनुमति दिइयो</string>
+    <string name="onb_battery_title">सधैं चलिरहन दिनुहोस्</string>
+    <string name="onb_battery_body">केही फोनले ब्याट्री बचाउन पृष्ठभूमिका एप बन्द गर्छन्। कुनै भुक्तानी नछुटोस् भनेर पैसा आयोलाई चल्न दिनुहोस्।</string>
+    <string name="onb_battery_button">पृष्ठभूमि प्रयोग अनुमति दिनुहोस्</string>
+    <string name="onb_battery_done">ब्याट्री अप्टिमाइजेसन बन्द छ</string>
+    <string name="onb_autostart_hint">%1$s फोनमा पैसा आयोको Auto-start पनि खोल्नुहोस्।</string>
+    <string name="onb_autostart_button">अटो-स्टार्ट सेटिङ खोल्नुहोस्</string>
+    <string name="onb_test_title">परीक्षण गरौं</string>
+    <string name="onb_test_body">भोल्युम बढाएर बटन थिच्नुहोस्। नमुना भुक्तानी सुनिनुपर्छ।</string>
+    <string name="onb_test_button">परीक्षण भुक्तानी बजाउनुहोस्</string>
+    <string name="onb_finish">पैसा आयो चलाउन सुरु गर्नुहोस्</string>
+    <string name="onb_step_of">चरण %1$d / %2$d</string>
+    <string name="action_continue">जारी राख्नुहोस्</string>
+    <string name="action_skip">अहिलेलाई छोड्नुहोस्</string>
+    <string name="action_back">पछाडि</string>
+
+    <!-- Home -->
+    <string name="home_status_listening">भुक्तानी सुनिरहेको छ</string>
+    <string name="home_status_listening_body">फोनको भोल्युम बढाइराख्नुहोस्।</string>
+    <string name="home_status_off">सुनिरहेको छैन</string>
+    <string name="home_status_off_body">सूचना पहुँच बन्द छ। खोल्न मिलाउनुहोस् थिच्नुहोस्।</string>
+    <string name="home_status_reconnecting">पुनः जडान हुँदैछ…</string>
+    <string name="home_status_reconnecting_body">एन्ड्रोइडले सेवा रोक्यो। फेरि सुरु गर्न मिलाउनुहोस् थिच्नुहोस्।</string>
+    <string name="home_fix">मिलाउनुहोस्</string>
+    <string name="home_today_received">आज प्राप्त</string>
+    <plurals name="payments_count">
+        <item quantity="one">%1$s भुक्तानी</item>
+        <item quantity="other">%1$s भुक्तानी</item>
+    </plurals>
+    <string name="home_recent">हालका भुक्तानी</string>
+    <string name="home_see_all">सबै हेर्नुहोस्</string>
+    <string name="home_empty_title">अहिलेसम्म कुनै भुक्तानी छैन</string>
+    <string name="home_empty_body">पैसा आएपछि यहाँ देखिन्छ र ठूलो स्वरमा सुनाइन्छ।</string>
+    <string name="home_test">आवाज परीक्षण</string>
+    <string name="nav_settings">सेटिङ</string>
+    <string name="nav_history">इतिहास</string>
+
+    <!-- Payments -->
+    <string name="payment_received">प्राप्त</string>
+    <string name="payment_paid">भुक्तानी</string>
+    <string name="cd_credit">%3$s मा %2$s बाट रु %1$s प्राप्त</string>
+    <string name="cd_debit">%3$s मा %2$s बाट रु %1$s भुक्तानी</string>
+    <string name="test_source">परीक्षण</string>
+
+    <!-- History -->
+    <string name="history_title">इतिहास</string>
+    <string name="filter_today">आज</string>
+    <string name="filter_7d">७ दिन</string>
+    <string name="filter_30d">३० दिन</string>
+    <string name="filter_all">सबै समय</string>
+    <string name="filter_all_types">सबै</string>
+    <string name="filter_received">प्राप्त</string>
+    <string name="filter_paid">भुक्तानी</string>
+    <string name="history_total_in">आएको</string>
+    <string name="history_total_out">गएको</string>
+    <string name="history_empty">यो अवधिमा कुनै भुक्तानी छैन।</string>
+    <string name="today">आज</string>
+    <string name="yesterday">हिजो</string>
+
+    <!-- Settings -->
+    <string name="settings_title">सेटिङ</string>
+    <string name="settings_section_language">भाषा</string>
+    <string name="settings_app_language">एपको भाषा</string>
+    <string name="settings_speech_language">सुनाउने भाषा</string>
+    <string name="speech_same_as_app">एपकै भाषा</string>
+    <string name="settings_section_announce">घोषणा</string>
+    <string name="settings_announce_debits">पठाएको पैसा पनि सुनाउने</string>
+    <string name="settings_announce_debits_body">सुरुमा बन्द हुन्छ। धेरै पसललाई आएको पैसा मात्र चाहिन्छ।</string>
+    <string name="settings_announce_source">एपको नाम पनि भन्ने</string>
+    <string name="settings_announce_source_body">जस्तै: \"eSewa मा पाँच सय रुपैयाँ प्राप्त भयो\"</string>
+    <string name="settings_raise_volume">सुनाउँदा भोल्युम बढाउने</string>
+    <string name="settings_raise_volume_body">केहीबेर मिडिया भोल्युम ८०% पुर्याएर फेरि पहिलेकै बनाउँछ।</string>
+    <string name="settings_recorded_voice">रेकर्ड गरिएको नेपाली आवाज प्रयोग गर्ने</string>
+    <string name="settings_voice_pack_ok">आवाज प्याक उपलब्ध छ</string>
+    <string name="settings_voice_pack_missing">आवाज प्याक छैन। फोनको टेक्स्ट-टु-स्पिच प्रयोग हुँदैछ।</string>
+    <string name="settings_test_voice">परीक्षण घोषणा बजाउनुहोस्</string>
+    <string name="settings_section_sources">स्रोतहरू</string>
+    <string name="settings_read_sms">बैंक SMS पढ्ने</string>
+    <string name="settings_read_sms_body">व्यक्तिगत नम्बरका सन्देश सधैं बेवास्ता गरिन्छन्।</string>
+    <string name="settings_sources_hint">पहिलो भुक्तानीपछि एपहरू यहाँ देखिन्छन्। सुनाउन नचाहेको एप बन्द गर्नुहोस्।</string>
+    <string name="settings_section_reliability">भरपर्दोपन</string>
+    <string name="settings_keep_alive">स्थायी सूचना</string>
+    <string name="settings_keep_alive_body">एन्ड्रोइडलाई सेवा चलाइराख्न मद्दत गर्छ।</string>
+    <string name="settings_notification_access">सूचना पहुँच</string>
+    <string name="settings_battery">ब्याट्री अप्टिमाइजेसन</string>
+    <string name="settings_autostart">अटो-स्टार्ट सेटिङ</string>
+    <string name="status_allowed">अनुमति छ</string>
+    <string name="status_not_allowed">अनुमति छैन। मिलाउन थिच्नुहोस्</string>
+    <string name="battery_unrestricted">असीमित</string>
+    <string name="battery_restricted">सीमित। मिलाउन थिच्नुहोस्</string>
+    <string name="settings_section_privacy">गोपनीयता र सुरक्षा</string>
+    <string name="settings_app_lock">एप लक</string>
+    <string name="settings_app_lock_body">एप खोल्न फिंगरप्रिन्ट, अनुहार वा स्क्रिन लक माग्ने।</string>
+    <string name="settings_app_lock_unavailable">पहिले यो फोनमा स्क्रिन लक राख्नुहोस्।</string>
+    <string name="settings_retention">इतिहास राख्ने अवधि</string>
+    <string name="retention_days">%1$s दिन</string>
+    <string name="settings_clear_history">इतिहास मेटाउनुहोस्</string>
+    <string name="clear_history_confirm_title">सबै इतिहास मेटाउने?</string>
+    <string name="clear_history_confirm_body">यसले यो फोनमा सुरक्षित सबै भुक्तानी स्थायी रूपमा मेटाउँछ।</string>
+    <string name="action_delete">मेटाउनुहोस्</string>
+    <string name="action_cancel">रद्द गर्नुहोस्</string>
+    <string name="settings_section_about">बारेमा</string>
+    <string name="settings_version">संस्करण %1$s</string>
+    <string name="settings_no_internet">इन्टरनेट अनुमति छैन। तपाईंको डेटा यही फोनमा रहन्छ।</string>
+    <string name="settings_source_code">GitHub मा स्रोत कोड</string>
+    <string name="settings_license">इजाजतपत्र: GPL-3.0</string>
+    <string name="settings_rerun_setup">सेटअप फेरि चलाउनुहोस्</string>
+
+    <!-- Lock -->
+    <string name="lock_title">पैसा आयो लक छ</string>
+    <string name="lock_button">अनलक गर्नुहोस्</string>
+    <string name="lock_prompt_title">पैसा आयो अनलक गर्नुहोस्</string>
+
+    <!-- Notifications -->
+    <string name="channel_keepalive">पृष्ठभूमि सेवा</string>
+    <string name="channel_keepalive_desc">पैसा आयोले भुक्तानी सुनिरहेको देखाउँछ।</string>
+    <string name="channel_test">परीक्षण भुक्तानी</string>
+    <string name="keepalive_title">भुक्तानी सुनिरहेको छ</string>
+    <string name="keepalive_text">पैसा आयो खोल्न थिच्नुहोस्</string>
+</resources>

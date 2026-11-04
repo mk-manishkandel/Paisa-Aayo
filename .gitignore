@@ -1,0 +1,20 @@
+# Gradle / build
+.gradle/
+build/
+/local.properties
+/captures
+.externalNativeBuild
+.cxx
+
+# IDE
+.idea/
+*.iml
+.DS_Store
+
+# Signing — never commit keys
+*.jks
+*.keystore
+keystore.properties
+
+# Local-only voice placeholders (generated, not licensed for redistribution)
+tools/voice/out/
