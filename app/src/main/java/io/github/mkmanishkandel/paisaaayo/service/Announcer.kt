@@ -44,7 +44,7 @@ class Announcer(context: Context) {
 
     private var tts: TextToSpeech? = null
     private var ttsReady: CompletableDeferred<Boolean>? = null
-    private val pendingUtterances = ConcurrentHashMap<String, CompletableDeferred<Unit>>()
+    private val pendingUtterances = ConcurrentHashMap<String, CompletableDeferred<Boolean>>()
 
     /** clip name → asset path, e.g. "ne_5" → "voice/ne/ne_5.ogg". */
     private val clipFiles: Map<String, String> by lazy {
@@ -137,7 +137,33 @@ class Announcer(context: Context) {
     // ---------------- text-to-speech ----------------
 
     private suspend fun speak(amountPaisa: Long, direction: Direction, source: String?, language: SpeechLanguage) {
-        val engine = ensureTts() ?: return
+        // A TextToSpeech instance stops working for good when its engine process dies (for example
+        // when the Play Store updates Google TTS). Start a fresh engine and retry once.
+        repeat(2) { attempt ->
+            val engine = ensureTts() ?: return
+            when (speakOnce(engine, amountPaisa, direction, source, language)) {
+                Spoken.OK -> return
+                Spoken.TIMED_OUT -> {
+                    runCatching { engine.stop() }
+                    return
+                }
+                Spoken.ENGINE_FAILED -> {
+                    Log.w(TAG, "Text-to-speech failed (attempt ${attempt + 1}); restarting the engine")
+                    resetTts()
+                }
+            }
+        }
+    }
+
+    private enum class Spoken { OK, TIMED_OUT, ENGINE_FAILED }
+
+    private suspend fun speakOnce(
+        engine: TextToSpeech,
+        amountPaisa: Long,
+        direction: Direction,
+        source: String?,
+        language: SpeechLanguage,
+    ): Spoken {
         var spokenLanguage = language
         if (!selectVoice(engine, language)) {
             // No Nepali (or Hindi) voice on this phone: English is better than silence.
@@ -146,15 +172,24 @@ class Announcer(context: Context) {
         }
         val text = Speech.sentence(spokenLanguage, amountPaisa, direction, source)
         val id = UUID.randomUUID().toString()
-        val done = CompletableDeferred<Unit>()
+        val done = CompletableDeferred<Boolean>()
         pendingUtterances[id] = done
-        val params = Bundle().apply { putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1f) }
-        if (engine.speak(text, TextToSpeech.QUEUE_ADD, params, id) != TextToSpeech.SUCCESS) {
+        try {
+            val params = Bundle().apply { putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1f) }
+            val queued = runCatching { engine.speak(text, TextToSpeech.QUEUE_ADD, params, id) }
+                .getOrDefault(TextToSpeech.ERROR)
+            if (queued != TextToSpeech.SUCCESS) return Spoken.ENGINE_FAILED
+            val ok = withTimeoutOrNull(UTTERANCE_TIMEOUT_MS) { done.await() } ?: return Spoken.TIMED_OUT
+            return if (ok) Spoken.OK else Spoken.ENGINE_FAILED
+        } finally {
             pendingUtterances.remove(id)
-            return
         }
-        withTimeoutOrNull(UTTERANCE_TIMEOUT_MS) { done.await() }
-        pendingUtterances.remove(id)
+    }
+
+    private fun resetTts() {
+        tts?.let { runCatching { it.shutdown() } }
+        tts = null
+        ttsReady = null
     }
 
     private fun selectVoice(engine: TextToSpeech, language: SpeechLanguage): Boolean {
@@ -185,11 +220,17 @@ class Announcer(context: Context) {
         engine.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onStart(utteranceId: String?) = Unit
             override fun onDone(utteranceId: String?) {
-                utteranceId?.let { pendingUtterances[it]?.complete(Unit) }
+                utteranceId?.let { pendingUtterances[it]?.complete(true) }
+            }
+            override fun onStop(utteranceId: String?, interrupted: Boolean) {
+                utteranceId?.let { pendingUtterances[it]?.complete(true) }
+            }
+            override fun onError(utteranceId: String?, errorCode: Int) {
+                utteranceId?.let { pendingUtterances[it]?.complete(false) }
             }
             @Deprecated("Deprecated in Java")
             override fun onError(utteranceId: String?) {
-                utteranceId?.let { pendingUtterances[it]?.complete(Unit) }
+                utteranceId?.let { pendingUtterances[it]?.complete(false) }
             }
         })
         tts = engine
@@ -197,9 +238,7 @@ class Announcer(context: Context) {
         val ok = withTimeoutOrNull(TTS_INIT_TIMEOUT_MS) { deferred.await() } ?: false
         if (!ok) {
             Log.w(TAG, "Text-to-speech engine unavailable")
-            runCatching { engine.shutdown() }
-            tts = null
-            ttsReady = null
+            resetTts()
             return null
         }
         return engine

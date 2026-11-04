@@ -23,6 +23,8 @@ object Sources {
         "com.duckduckgo", "com.UCMobile", "com.mi.globalbrowser", "com.miui.browser",
         "com.heytap.browser", "com.vivo.browser", "com.sec.android.app.sbrowser",
         "com.transsion.phoenix", "com.android.browser", "com.microsoft.emmx",
+        // Other Paisa Aayo builds (debug/release side by side): their test payment isn't real money.
+        "io.github.mkmanishkandel.paisaaayo",
     )
 
     private val SMS_APPS = setOf(
@@ -50,6 +52,12 @@ object Sources {
         if (packageName in SMS_APPS) return true
         val p = packageName.lowercase()
         return "mms" in p || "messag" in p || ".sms" in p
+    }
+
+    /** True for well-known Nepali wallet and bank apps (matched by package keyword). */
+    fun isKnownPaymentApp(packageName: String): Boolean {
+        val lower = packageName.lowercase()
+        return KNOWN_NAMES.any { (key, _) -> key in lower }
     }
 
     /** Best-effort human name for a package when no app label is available. */

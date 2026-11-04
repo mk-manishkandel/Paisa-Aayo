@@ -25,6 +25,9 @@ interface PaymentDao {
     @Query("SELECT EXISTS(SELECT 1 FROM payments WHERE reference = :reference AND timestamp >= :since)")
     suspend fun referenceExists(reference: String, since: Long): Boolean
 
+    @Query("SELECT EXISTS(SELECT 1 FROM payments WHERE packageName = :packageName AND isTest = 0)")
+    suspend fun hasPaymentsFrom(packageName: String): Boolean
+
     @Query("SELECT packageName, MAX(sourceLabel) AS sourceLabel FROM payments WHERE isTest = 0 GROUP BY packageName ORDER BY sourceLabel")
     fun sources(): Flow<List<SourceApp>>
 

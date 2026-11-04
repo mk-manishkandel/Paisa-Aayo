@@ -11,7 +11,10 @@ package io.github.mkmanishkandel.paisaaayo.parser
  * Rules, checked in order:
  *  1. same notification key + same text seen in the last [repostWindowMillis] → duplicate
  *  2. same reference number seen in the last [referenceWindowMillis] → duplicate
- *  3. same amount + direction from a *different* app within [crossAppWindowMillis] → duplicate
+ *  3. same amount + direction from a *different* app within [crossAppWindowMillis] → duplicate,
+ *     unless both are app notifications with different references (two customers paying the
+ *     same amount on two wallets). A bank SMS numbers the payment its own way, so SMS + app
+ *     with different references is still one payment.
  *  4. same amount + direction from the same app, neither with a reference, within
  *     [sameAppWindowMillis] → duplicate (an edited re-post)
  */
@@ -51,7 +54,8 @@ class Deduplicator(
             when {
                 s.notificationKey == notificationKey && s.textHash == textHash && age <= repostWindowMillis -> true
                 payment.reference != null && s.reference == payment.reference -> true
-                sameMoney && s.packageName != packageName && age <= crossAppWindowMillis -> true
+                sameMoney && s.packageName != packageName && age <= crossAppWindowMillis ->
+                    !distinctAppPayments(s.packageName, s.reference, packageName, payment.reference)
                 sameMoney && s.packageName == packageName && s.reference == null &&
                     payment.reference == null && age <= sameAppWindowMillis -> true
                 else -> false
@@ -65,4 +69,7 @@ class Deduplicator(
         }
         return duplicate
     }
+
+    private fun distinctAppPayments(pkgA: String, refA: String?, pkgB: String, refB: String?): Boolean =
+        refA != null && refB != null && refA != refB && !Sources.isSmsApp(pkgA) && !Sources.isSmsApp(pkgB)
 }

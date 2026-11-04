@@ -38,6 +38,10 @@ Download the latest `PaisaAayo-x.y.z.apk` from
 On Android 13+, sideloaded apps need one extra tap before notification access can be granted:
 **Settings → Apps → Paisa Aayo → ⋮ → Allow restricted settings**. The setup screen links there.
 
+> **Android 15+:** Android hides notifications that look like they contain a code (including
+> many short transaction IDs) from apps like this one. Paisa Aayo then shows a "Check eSewa"
+> reminder instead of staying silent. See [SECURITY.md](SECURITY.md#known-limitations).
+
 ## How it works
 
 ```

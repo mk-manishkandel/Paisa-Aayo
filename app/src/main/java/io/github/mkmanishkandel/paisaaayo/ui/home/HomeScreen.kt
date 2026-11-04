@@ -24,6 +24,7 @@ import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -57,6 +58,7 @@ import io.github.mkmanishkandel.paisaaayo.service.ListenerState
 import io.github.mkmanishkandel.paisaaayo.service.PaymentListenerService
 import io.github.mkmanishkandel.paisaaayo.service.TestPayment
 import io.github.mkmanishkandel.paisaaayo.ui.Format
+import io.github.mkmanishkandel.paisaaayo.ui.rememberStartOfToday
 import io.github.mkmanishkandel.paisaaayo.ui.components.EmptyState
 import io.github.mkmanishkandel.paisaaayo.ui.components.LiveDot
 import io.github.mkmanishkandel.paisaaayo.ui.components.PaisaCard
@@ -77,10 +79,10 @@ private enum class ListenStatus { LISTENING, RECONNECTING, OFF }
 fun HomeScreen(onOpenHistory: () -> Unit, onOpenSettings: () -> Unit) {
     val context = LocalContext.current
     val dao = remember { context.container.database.payments() }
-    val todayStart = remember { Format.startOfDay() }
+    val todayStart = rememberStartOfToday()
     val recent by remember { dao.recent(8) }.collectAsStateWithLifecycle(emptyList())
-    val todayTotal by remember { dao.creditTotalSince(todayStart) }.collectAsStateWithLifecycle(0L)
-    val todayCount by remember { dao.creditCountSince(todayStart) }.collectAsStateWithLifecycle(0)
+    val todayTotal by remember(todayStart) { dao.creditTotalSince(todayStart) }.collectAsStateWithLifecycle(0L)
+    val todayCount by remember(todayStart) { dao.creditCountSince(todayStart) }.collectAsStateWithLifecycle(0)
 
     val connected by ListenerState.connected.collectAsState()
     var hasAccess by remember { mutableStateOf(SystemSettings.hasNotificationAccess(context)) }
@@ -94,6 +96,10 @@ fun HomeScreen(onOpenHistory: () -> Unit, onOpenSettings: () -> Unit) {
         else -> ListenStatus.RECONNECTING
     }
     val scope = rememberCoroutineScope()
+    val settings by remember { context.container.settings.settings }.collectAsStateWithLifecycle(null)
+    val hidden = settings?.takeIf {
+        it.lastHiddenAt > it.hiddenDismissedAt && System.currentTimeMillis() - it.lastHiddenAt < HIDDEN_NOTICE_MS
+    }
 
     LazyColumn(
         modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing),
@@ -122,6 +128,13 @@ fun HomeScreen(onOpenHistory: () -> Unit, onOpenSettings: () -> Unit) {
                     NotificationListenerService.requestRebind(ComponentName(context, PaymentListenerService::class.java))
                 } else {
                     SystemSettings.openNotificationAccess(context)
+                }
+            }
+        }
+        if (hidden != null) {
+            item {
+                HiddenNotificationCard(hidden.lastHiddenSource, hidden.lastHiddenAt) {
+                    scope.launch { context.container.settings.dismissHidden(hidden.lastHiddenAt) }
                 }
             }
         }
@@ -173,6 +186,41 @@ private fun StatusCard(status: ListenStatus, onFix: () -> Unit) {
             if (status != ListenStatus.LISTENING) {
                 Spacer(Modifier.width(Spacing.sm))
                 PrimaryButton(stringResource(R.string.home_fix), onFix, modifier = Modifier.width(112.dp))
+            }
+        }
+    }
+}
+
+private const val HIDDEN_NOTICE_MS = 24 * 60 * 60 * 1000L
+
+/** Android 15+ hid a payment app's notification from us; tell the shopkeeper to check that app. */
+@Composable
+private fun HiddenNotificationCard(source: String, at: Long, onDismiss: () -> Unit) {
+    val nepali = LocalNepali.current
+    val paisa = LocalPaisaColors.current
+    PaisaCard {
+        Column(
+            Modifier
+                .padding(Spacing.lg)
+                .semantics { liveRegion = LiveRegionMode.Polite },
+            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Rounded.VisibilityOff, contentDescription = null, tint = paisa.accentText)
+                Spacer(Modifier.width(Spacing.sm))
+                Text(
+                    stringResource(R.string.home_hidden_title, source),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
+            Text(
+                stringResource(R.string.home_hidden_body, source, Format.time(at, nepali)),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            TextButton(onClick = onDismiss, modifier = Modifier.heightIn(min = 48.dp).align(Alignment.End)) {
+                Text(stringResource(R.string.home_hidden_dismiss), color = paisa.accentText)
             }
         }
     }
