@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Paisa Aayo mark: a speech bubble saying "रु". Source: docs/brand/mark.svg -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp" android:height="24dp"
     android:viewportWidth="24" android:viewportHeight="24">
-    <path android:fillColor="#FFFFFF"
-        android:pathData="M10,12m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0" />
-    <path android:strokeColor="#FFFFFF" android:strokeWidth="1.6" android:strokeLineCap="round"
-        android:fillColor="#00000000" android:pathData="M18,8.5a5,5 0,0 1,0 7" />
-    <path android:strokeColor="#FFFFFF" android:strokeWidth="1.6" android:strokeLineCap="round"
-        android:fillColor="#00000000" android:pathData="M20.5,6a8.5,8.5 0,0 1,0 12" />
+    <path android:fillColor="#FFFFFF" android:pathData="M2.16 11.65C2.16 5.9 6.82 1.23 12.58 1.23C18.33 1.23 23 5.9 23 11.65C23 17.41 18.33 22.07 12.58 22.07C10.88 22.07 9.28 21.67 7.86 20.95Q4.66 22.77 1 22.77C2.22 21.37 3.32 19.84 4.08 17.68C2.87 15.98 2.16 13.9 2.16 11.65ZM18.15 12.54Q18.15 11.21 17.36 10.43Q16.56 9.64 15.12 9.64Q14.49 9.64 13.98 9.79Q13.97 9.19 13.85 8.77Q13.81 8.61 13.76 8.47H19V6.21H6.71V8.47H10.96Q10.98 8.53 10.99 8.58Q11.12 9.02 11.12 9.54Q11.12 10.21 10.8 10.65Q10.66 10.84 10.43 11.02Q10.21 10.84 10 10.69Q9.43 10.31 8.73 10.31Q8.08 10.31 7.67 10.68Q7.26 11.05 7.26 11.69Q7.26 12.15 7.46 12.62Q7.66 13.1 8.07 13.68Q8.74 14.59 9.84 15.68Q10.95 16.77 12.43 18.02L14.4 16.2Q13.71 15.66 13.07 15.16Q12.44 14.65 11.86 14.14Q11.51 13.83 11.16 13.51Q11.9 13.22 12.48 12.81Q12.8 12.58 13.05 12.32Q13.32 12.12 13.56 12.02Q13.93 11.86 14.33 11.86Q14.8 11.86 15.03 12.09Q15.26 12.33 15.26 12.75Q15.26 13.14 14.98 13.55Q14.7 13.95 14.25 14.31L16.47 15.79Q17.35 15.04 17.75 14.24Q18.15 13.43 18.15 12.54Z" />
 </vector>

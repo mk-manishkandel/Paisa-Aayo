@@ -20,6 +20,25 @@ trustworthy"`), then adapted for Android / Material 3 and Devanagari.
 Tokens live in `app/src/main/java/.../ui/theme/`. Screens use only `MaterialTheme.colorScheme`
 and `LocalPaisaColors`, with no raw hex.
 
+## Logo
+
+<img src="brand/icon.svg" width="96" alt="Paisa Aayo icon">
+
+A speech bubble saying **रु**: the price-tag abbreviation every Nepali shopkeeper reads daily,
+coming out of a phone's mouth. One flat shape, so it survives a 24 dp status-bar icon and a
+themed (monochrome) launcher icon. The letter is Noto Sans Devanagari ExtraBold, outlined and
+cut out of the bubble, so the hole shows whatever is behind it. The tail is drawn with curves,
+not a triangle, so it reads as hand-cut paper rather than a chat-app glyph.
+
+| File | Use |
+|---|---|
+| `docs/brand/mark.svg` | The mark alone (gold) |
+| `docs/brand/icon.svg`, `icon-512.png` | Store / README icon |
+| `docs/brand/banner.svg`, `banner.png` | README and social preview (1280×640, text outlined) |
+| `res/drawable/ic_launcher_foreground.xml`, `ic_launcher_monochrome.xml` | Adaptive + themed icon (inside the 66 dp safe zone) |
+| `res/drawable/ic_stat_listening.xml` | Status-bar icon |
+| `res/drawable/ic_brand_mark.xml` | In-app hero on the welcome screen |
+
 ## Pre-delivery checklist (from the skill's `pro-rules.md`)
 
 - [x] Vector icons from one family (Material Symbols *Rounded*); no emoji
