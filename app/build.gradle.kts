@@ -15,8 +15,10 @@ android {
         applicationId = "io.github.mkmanishkandel.paisaaayo"
         minSdk = 26
         targetSdk = 36
-        versionCode = (project.findProperty("versionCode") as String?)?.toInt() ?: 1
         versionName = (project.findProperty("versionName") as String?) ?: "1.0.0"
+        // Derived from the version so every release (and every rebuild of it) gets the same,
+        // ever-increasing code that Google Play requires: 1.2.3 -> 10203.
+        versionCode = versionCodeFor(versionName!!)
     }
 
     signingConfigs {
@@ -56,6 +58,8 @@ android {
         warningsAsErrors = false
     }
     androidResources {
+        // Ship only the languages the app is translated into (AndroidX brings ~80 more).
+        localeFilters += listOf("en", "ne")
         // Voice clips are opened with AssetManager.openFd(), which needs them stored uncompressed.
         noCompress += listOf("ogg", "m4a", "mp3", "wav")
         @Suppress("UnstableApiUsage")
@@ -106,4 +110,11 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
+}
+
+fun versionCodeFor(version: String): Int {
+    val parts = version.substringBefore('-').split('.').map { it.toIntOrNull() ?: 0 }
+    val (major, minor, patch) = (parts + listOf(0, 0, 0)).take(3)
+    require(minor < 100 && patch < 100) { "Version $version: minor and patch must be below 100" }
+    return major * 10_000 + minor * 100 + patch
 }

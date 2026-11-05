@@ -7,7 +7,9 @@ from fontTools.pens.transformPen import TransformPen
 from fontTools.pens.boundsPen import BoundsPen
 from fontTools.pens.recordingPen import RecordingPen, DecomposingRecordingPen
 from fontTools.svgLib.path import parse_path
-FONT = sys.argv[1]
+import os
+# The app's bundled Devanagari font (the same one the UI uses).
+FONT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "app/src/main/res/font/noto_sans_devanagari.ttf")
 def ntos(v): return ("%.2f" % v).rstrip("0").rstrip(".")
 _cache = {}
 def shaped(font_path, text, wght, axes=None):

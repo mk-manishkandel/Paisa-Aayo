@@ -21,6 +21,21 @@ object SystemSettings {
     fun hasPostNotifications(context: Context): Boolean =
         NotificationManagerCompat.from(context).areNotificationsEnabled()
 
+    /** True when installed by an app store (Play etc.). Sideloaded apps hit Android 13's "restricted settings". */
+    fun isInstalledFromStore(context: Context): Boolean = runCatching {
+        val installer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            context.packageManager.getInstallSourceInfo(context.packageName).installingPackageName
+        } else {
+            @Suppress("DEPRECATION")
+            context.packageManager.getInstallerPackageName(context.packageName)
+        }
+        installer != null && installer !in SIDELOAD_INSTALLERS
+    }.getOrDefault(false)
+
+    private val SIDELOAD_INSTALLERS = setOf(
+        "com.google.android.packageinstaller", "com.android.packageinstaller", "com.android.shell",
+    )
+
     fun isIgnoringBatteryOptimizations(context: Context): Boolean {
         val pm = context.getSystemService(PowerManager::class.java) ?: return true
         return pm.isIgnoringBatteryOptimizations(context.packageName)

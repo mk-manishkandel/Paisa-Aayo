@@ -15,9 +15,9 @@
     <string name="onb_point_voice_title">नेपाली र अंग्रेजीमा बोल्छ</string>
     <string name="onb_point_voice_body">लाख र करोडसम्मको रकम पनि प्रस्ट सुनाउँछ।</string>
     <string name="onb_access_title">सूचना पहुँच दिनुहोस्</string>
-    <string name="onb_access_body">पैसा कहिले आयो भनेर थाहा पाउन पैसा आयोले भुक्तानीका सूचना पढ्छ। च्याट, इमेल र सामाजिक एपहरू सधैं बेवास्ता गरिन्छन्।</string>
+    <string name="onb_access_body">भुक्तानी सुनाउन पैसा आयोले यो फोनका सूचनाहरू पढ्नुपर्छ। यसले हरेक नयाँ सूचनामा भुक्तानी सन्देश छ कि छैन जाँच्छ। हरेक भुक्तानीको रकम, एपको नाम, सन्दर्भ नम्बर र समय मात्र यही फोनमा राख्छ। केही पनि फोनबाहिर पठाइँदैन। च्याट, इमेल र सामाजिक एपहरू सधैं बेवास्ता गरिन्छन्।</string>
     <string name="onb_access_steps">अर्को स्क्रिनमा पैसा आयो खोजेर खोल्नुहोस्।</string>
-    <string name="onb_access_button">सेटिङ खोल्नुहोस्</string>
+    <string name="onb_access_button">सहमत छु, सेटिङ खोल्नुहोस्</string>
     <string name="onb_access_granted">पहुँच दिइयो</string>
     <string name="onb_restricted_hint">स्विच खुलेन? App info खोल्नुहोस्, ⋮ मेनु थिच्नुहोस्, \"Allow restricted settings\" छान्नुहोस् र फेरि प्रयास गर्नुहोस्।</string>
     <string name="onb_app_info_button">एप जानकारी खोल्नुहोस्</string>
@@ -132,6 +132,7 @@
     <string name="settings_version">संस्करण %1$s</string>
     <string name="settings_no_internet">इन्टरनेट अनुमति छैन। तपाईंको डेटा यही फोनमा रहन्छ।</string>
     <string name="settings_source_code">GitHub मा स्रोत कोड</string>
+    <string name="privacy_policy">गोपनीयता नीति</string>
     <string name="settings_license">इजाजतपत्र: GPL-3.0</string>
     <string name="settings_rerun_setup">सेटअप फेरि चलाउनुहोस्</string>
 

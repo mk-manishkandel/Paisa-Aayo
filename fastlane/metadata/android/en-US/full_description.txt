@@ -1,0 +1,35 @@
+Paisa Aayo turns your Android phone into a payment speaker for your shop. When a customer pays you, your phone says it out loud in Nepali or English: "पाँच सय रुपैयाँ प्राप्त भयो" or "Received five hundred rupees". You don't need to check the screen or buy a separate soundbox.
+
+<b>Works with the apps you already use</b>
+• eSewa, Khalti, Fonepay QR, IME Pay and ConnectIPS
+• Bank SMS and bank app notifications
+• Amounts read correctly up to lakhs and crores, including paisa
+
+<b>Private by design</b>
+• No internet permission, so your payment data cannot leave the phone
+• No ads, no account, no tracking
+• Only the amount, app name, reference number and time are saved, on your phone
+• Optional app lock with fingerprint, face or screen lock
+
+<b>Made to avoid false alarms</b>
+• Ignores "I sent you money" SMS from personal numbers, a common scam
+• Never reads out remarks typed by the payer
+• Skips OTPs, money requests, failed payments, top-ups and offers
+• Says each payment once, even when both the wallet and the bank notify you
+
+<b>Easy to set up</b>
+A short guided setup in Nepali or English asks for notification access, helps keep the app running on phones that close background apps, and plays a test payment so you know it works.
+
+<b>Your payment record</b>
+See today's total at a glance and a history of money in and out by day, week or month. Choose how long history is kept, or clear it anytime.
+
+<b>Free and open source</b>
+Paisa Aayo is free software under the GPL-3.0 licence. Anyone can read the code, check what it does and suggest improvements:
+https://github.com/mk-manishkandel/Paisa-Aayo
+
+<b>How it works</b>
+Paisa Aayo uses Android's notification access to see payment notifications as they arrive. It reads them on your phone and does not send them anywhere. A small silent notification keeps it running in the background.
+
+Note: on Android 15 and later, Android hides some notifications that look like they contain a one-time code, including some short transaction IDs. Paisa Aayo cannot read those. When this happens to a payment app, it shows a reminder to check that app.
+
+Paisa Aayo is an independent project and is not affiliated with eSewa, Khalti, Fonepay, IME Pay, NCHL or any bank.

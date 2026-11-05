@@ -1,7 +1,5 @@
 package io.github.mkmanishkandel.paisaaayo.ui.settings
 
-import android.content.Intent
-import androidx.core.net.toUri
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
@@ -30,6 +28,7 @@ import androidx.compose.material.icons.rounded.Code
 import androidx.compose.material.icons.rounded.DeleteForever
 import androidx.compose.material.icons.rounded.Fingerprint
 import androidx.compose.material.icons.rounded.Gavel
+import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material.icons.rounded.NotificationsActive
@@ -85,10 +84,10 @@ import io.github.mkmanishkandel.paisaaayo.ui.theme.LocalNepali
 import io.github.mkmanishkandel.paisaaayo.ui.theme.LocalPaisaColors
 import io.github.mkmanishkandel.paisaaayo.ui.theme.Spacing
 import io.github.mkmanishkandel.paisaaayo.util.AppLanguage
+import io.github.mkmanishkandel.paisaaayo.util.Links
 import io.github.mkmanishkandel.paisaaayo.util.SystemSettings
 import kotlinx.coroutines.launch
 
-private const val REPO_URL = "https://github.com/mk-manishkandel/Paisa-Aayo"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -239,10 +238,13 @@ fun SettingsScreen(
                 Section(stringResource(R.string.settings_section_about)) {
                     NavRow(Icons.Rounded.WifiOff, stringResource(R.string.settings_no_internet), null, chevron = false) {}
                     NavRow(Icons.Rounded.Code, stringResource(R.string.settings_source_code), null) {
-                        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, REPO_URL.toUri())) }
+                        Links.open(context, Links.REPO)
+                    }
+                    NavRow(Icons.Rounded.PrivacyTip, stringResource(R.string.privacy_policy), null) {
+                        Links.open(context, Links.PRIVACY_POLICY)
                     }
                     NavRow(Icons.Rounded.Gavel, stringResource(R.string.settings_license), null) {
-                        runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, "$REPO_URL/blob/main/LICENSE".toUri())) }
+                        Links.open(context, Links.LICENSE)
                     }
                     NavRow(Icons.Rounded.RestartAlt, stringResource(R.string.settings_rerun_setup), null, onClick = onRerunSetup)
                     NavRow(Icons.Rounded.Info, stringResource(R.string.settings_version, BuildConfig.VERSION_NAME), null, chevron = false) {}

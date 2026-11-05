@@ -91,7 +91,11 @@ and the debug APK is attached to the run.
 2. Add repository secrets (**Settings → Secrets and variables → Actions**):
    `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`.
 3. Tag and push: `git tag v1.0.0 && git push origin v1.0.0`. The *Release* workflow builds,
-   signs and publishes the APK with a checksum file.
+   signs and publishes the APK, the Play App Bundle (`.aab`), the R8 mapping file and checksums.
+   The version code is derived from the tag (`v1.2.3` → 10203).
+
+Publishing on Google Play (listing, data safety, permission declarations, signing) is covered
+step by step in [docs/play/README.md](docs/play/README.md).
 
 ## Contributing
 

@@ -84,6 +84,7 @@ import io.github.mkmanishkandel.paisaaayo.ui.theme.LocalReducedMotion
 import io.github.mkmanishkandel.paisaaayo.ui.theme.Motion
 import io.github.mkmanishkandel.paisaaayo.ui.theme.Spacing
 import io.github.mkmanishkandel.paisaaayo.util.AppLanguage
+import io.github.mkmanishkandel.paisaaayo.util.Links
 import io.github.mkmanishkandel.paisaaayo.util.SystemSettings
 import kotlinx.coroutines.launch
 
@@ -297,11 +298,14 @@ private fun Feature(icon: ImageVector, title: String, body: String) {
 private fun AccessStep(granted: Boolean) {
     val context = LocalContext.current
     StepHeader(Icons.Rounded.Lock, stringResource(R.string.onb_access_title), stringResource(R.string.onb_access_body))
+    TextButton(onClick = { Links.open(context, Links.PRIVACY_POLICY) }, modifier = Modifier.heightIn(min = 48.dp)) {
+        Text(stringResource(R.string.privacy_policy), color = LocalPaisaColors.current.accentText)
+    }
     if (granted) {
         DoneChip(stringResource(R.string.onb_access_granted))
     } else {
         Text(stringResource(R.string.onb_access_steps), style = MaterialTheme.typography.bodyMedium, color = LocalPaisaColors.current.accentText)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !SystemSettings.isInstalledFromStore(context)) {
             // Android 13+ blocks notification access for apps installed outside an app store
             // until "Allow restricted settings" is chosen in App info.
             Text(stringResource(R.string.onb_restricted_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

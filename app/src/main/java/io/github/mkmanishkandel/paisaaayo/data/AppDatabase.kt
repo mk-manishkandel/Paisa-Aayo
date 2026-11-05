@@ -11,6 +11,9 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
         fun create(context: Context): AppDatabase =
-            Room.databaseBuilder(context, AppDatabase::class.java, "paisa_aayo.db").build()
+            Room.databaseBuilder(context, AppDatabase::class.java, "paisa_aayo.db")
+                // Installing an older version over a newer one must not crash the listener.
+                .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
+                .build()
     }
 }

@@ -19,9 +19,9 @@
     <string name="onb_point_voice_title">Speaks Nepali and English</string>
     <string name="onb_point_voice_body">Clear announcements, even for lakhs and crores.</string>
     <string name="onb_access_title">Allow notification access</string>
-    <string name="onb_access_body">Paisa Aayo reads payment notifications to know when money arrives. Chats, email and social apps are always ignored.</string>
+    <string name="onb_access_body">To announce payments, Paisa Aayo needs to read the notifications on this phone. It checks each new notification for a payment message. For each payment it keeps only the amount, the app\'s name, the reference number and the time, on this phone. Nothing is ever sent off the phone. Chats, email and social apps are always ignored.</string>
     <string name="onb_access_steps">On the next screen, find Paisa Aayo and turn it on.</string>
-    <string name="onb_access_button">Open settings</string>
+    <string name="onb_access_button">Agree and open settings</string>
     <string name="onb_access_granted">Access granted</string>
     <string name="onb_restricted_hint">Switch greyed out? Open App info, tap the ⋮ menu, choose \"Allow restricted settings\", then try again.</string>
     <string name="onb_app_info_button">Open app info</string>
@@ -136,6 +136,7 @@
     <string name="settings_version">Version %1$s</string>
     <string name="settings_no_internet">No internet permission. Your data stays on this phone.</string>
     <string name="settings_source_code">Source code on GitHub</string>
+    <string name="privacy_policy">Privacy policy</string>
     <string name="settings_license">License: GPL-3.0</string>
     <string name="settings_rerun_setup">Run setup again</string>
 
