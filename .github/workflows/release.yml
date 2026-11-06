@@ -67,14 +67,15 @@ jobs:
           generate_release_notes: true
 
       # Optional: add a PLAY_SERVICE_ACCOUNT_JSON secret (see docs/play/README.md) to also upload
-      # the bundle to Google Play's internal testing track. Skipped when the secret is absent.
+      # the bundle to Google Play. Track: repository variable PLAY_TRACK (internal, alpha = closed
+      # testing, beta = open testing, production); defaults to internal. Skipped without the secret.
       - name: Check for Google Play credentials
         id: play
         env:
           PLAY_JSON: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
         run: echo "enabled=$([ -n "$PLAY_JSON" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
 
-      - name: Upload to Google Play (internal testing)
+      - name: Upload to Google Play (${{ vars.PLAY_TRACK || 'internal' }})
         if: steps.play.outputs.enabled == 'true'
         uses: r0adkll/upload-google-play@v1
         with:
@@ -83,5 +84,5 @@ jobs:
           releaseFiles: dist/PaisaAayo-${{ env.VERSION }}.aab
           mappingFile: dist/PaisaAayo-${{ env.VERSION }}-mapping.txt
           whatsNewDirectory: fastlane/metadata/android/whatsnew
-          track: internal
+          track: ${{ vars.PLAY_TRACK || 'internal' }}
           status: completed

@@ -131,6 +131,11 @@ After the first manual upload, the Release workflow can push each tagged build t
    *Release apps to testing tracks* for Paisa Aayo.
 3. GitHub → Settings → Secrets → Actions → add `PLAY_SERVICE_ACCOUNT_JSON` with the JSON contents.
 
+Optional: to upload straight to your closed test instead of internal testing, add a repository
+**variable** (Settings → Secrets and variables → Actions → *Variables*) named `PLAY_TRACK` with
+the value `alpha` (closed testing, the default "Closed testing - Alpha" track), `beta` (open
+testing) or `production`. For a custom closed track use its name exactly as shown in the Console.
+
 The next `v*` tag uploads the `.aab`, mapping file and release notes from
 `fastlane/metadata/android/whatsnew/`. Promote to closed/production in the Console.
 
