@@ -2,7 +2,7 @@
 
 **Effective date:** 6 November 2026
 **App:** Paisa Aayo: Payment Speaker (`io.github.mkmanishkandel.paisaaayo`)
-**Developer:** Manish Kandel ([github.com/mk-manishkandel](https://github.com/mk-manishkandel))
+**Developer:** Manish Kandel ([hello@manishkandel.com.np](mailto:hello@manishkandel.com.np))
 
 Paisa Aayo announces payments you receive by reading payment notifications on your phone.
 It is built so your money data **cannot** leave your phone.
@@ -59,6 +59,6 @@ file is public in the project's repository.
 
 ## Contact
 
-Questions or concerns: open an issue at
-[github.com/mk-manishkandel/Paisa-Aayo/issues](https://github.com/mk-manishkandel/Paisa-Aayo/issues).
+Questions or concerns: email [hello@manishkandel.com.np](mailto:hello@manishkandel.com.np), or open
+an issue at [github.com/mk-manishkandel/Paisa-Aayo/issues](https://github.com/mk-manishkandel/Paisa-Aayo/issues).
 The app is open source, so anyone can verify these statements in its code.
