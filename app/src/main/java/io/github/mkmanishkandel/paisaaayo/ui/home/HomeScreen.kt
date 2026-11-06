@@ -40,7 +40,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
@@ -64,7 +63,6 @@ import io.github.mkmanishkandel.paisaaayo.ui.components.LiveDot
 import io.github.mkmanishkandel.paisaaayo.ui.components.PaisaCard
 import io.github.mkmanishkandel.paisaaayo.ui.components.PaymentRow
 import io.github.mkmanishkandel.paisaaayo.ui.components.PrimaryButton
-import io.github.mkmanishkandel.paisaaayo.ui.components.SecondaryButton
 import io.github.mkmanishkandel.paisaaayo.ui.components.SectionHeader
 import io.github.mkmanishkandel.paisaaayo.ui.theme.LocalNepali
 import io.github.mkmanishkandel.paisaaayo.ui.theme.LocalPaisaColors
@@ -72,6 +70,12 @@ import io.github.mkmanishkandel.paisaaayo.ui.theme.Spacing
 import io.github.mkmanishkandel.paisaaayo.ui.theme.tabular
 import io.github.mkmanishkandel.paisaaayo.util.SystemSettings
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.offset
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 
 private enum class ListenStatus { LISTENING, RECONNECTING, OFF }
 
@@ -230,27 +234,52 @@ private fun HiddenNotificationCard(source: String, at: Long, onDismiss: () -> Un
 private fun TodayCard(totalPaisa: Long, count: Int, onTest: () -> Unit) {
     val nepali = LocalNepali.current
     val scheme = MaterialTheme.colorScheme
-    PaisaCard(container = Color.Transparent) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .background(Brush.linearGradient(listOf(scheme.primaryContainer, scheme.surfaceContainer)))
-                .padding(Spacing.xl),
-            verticalArrangement = Arrangement.spacedBy(Spacing.xs),
-        ) {
-            Text(stringResource(R.string.home_today_received), style = MaterialTheme.typography.labelLarge, color = scheme.onPrimaryContainer)
-            Text(
-                Format.amount(totalPaisa, nepali),
-                style = MaterialTheme.typography.displayMedium.tabular,
-                color = scheme.onSurface,
+    // Solid gold in both themes. Ink on gold is ~9:1; the 75 % ink secondary text is still ~5.5:1.
+    val gold = scheme.primary
+    val ink = scheme.onPrimary
+    val inkSoft = ink.copy(alpha = 0.75f)
+    PaisaCard(container = gold, borderColor = gold) {
+        Box(Modifier.fillMaxWidth()) {
+            // Brand mark as a faint watermark in the corner.
+            Icon(
+                painterResource(R.drawable.ic_brand_mark),
+                contentDescription = null,
+                tint = ink.copy(alpha = 0.08f),
+                modifier = Modifier.align(Alignment.TopEnd).offset(x = 28.dp, y = (-20).dp).size(150.dp),
             )
-            Text(
-                pluralStringResource(R.plurals.payments_count, count, Format.number(count.toLong(), nepali)),
-                style = MaterialTheme.typography.bodyMedium,
-                color = scheme.onSurfaceVariant,
-            )
-            Spacer(Modifier.size(Spacing.md))
-            SecondaryButton(stringResource(R.string.home_test), onTest, icon = Icons.AutoMirrored.Rounded.VolumeUp)
+            Column(
+                Modifier.fillMaxWidth().padding(Spacing.xl),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs),
+            ) {
+                Text(
+                    stringResource(R.string.home_today_received),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = inkSoft,
+                )
+                Text(
+                    Format.amount(totalPaisa, nepali),
+                    style = MaterialTheme.typography.displayMedium.tabular,
+                    fontWeight = FontWeight.Bold,
+                    color = ink,
+                )
+                Text(
+                    pluralStringResource(R.plurals.payments_count, count, Format.number(count.toLong(), nepali)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = inkSoft,
+                )
+                Spacer(Modifier.size(Spacing.md))
+                Button(
+                    onClick = onTest,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                    shape = MaterialTheme.shapes.medium,
+                    colors = ButtonDefaults.buttonColors(containerColor = ink, contentColor = gold),
+                ) {
+                    Icon(Icons.AutoMirrored.Rounded.VolumeUp, contentDescription = null, modifier = Modifier.size(20.dp))
+                    Spacer(Modifier.width(Spacing.sm))
+                    Text(stringResource(R.string.home_test), style = MaterialTheme.typography.labelLarge)
+                }
+            }
         }
     }
 }
