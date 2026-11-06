@@ -143,6 +143,8 @@
     <!-- Lock -->
     <string name="lock_title">Paisa Aayo is locked</string>
     <string name="lock_button">Unlock</string>
+    <string name="lock_body">Your payment history stays private. Unlock with your fingerprint, face or screen lock.</string>
+    <string name="lock_still_listening">Payments are still announced while locked</string>
     <string name="lock_prompt_title">Unlock Paisa Aayo</string>
 
     <!-- Notifications -->

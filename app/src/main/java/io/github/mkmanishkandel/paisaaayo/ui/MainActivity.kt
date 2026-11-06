@@ -12,7 +12,6 @@ import androidx.biometric.BiometricPrompt
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,7 +41,6 @@ import androidx.navigation.compose.rememberNavController
 import io.github.mkmanishkandel.paisaaayo.R
 import io.github.mkmanishkandel.paisaaayo.container
 import io.github.mkmanishkandel.paisaaayo.data.Settings
-import io.github.mkmanishkandel.paisaaayo.ui.components.IconBadge
 import io.github.mkmanishkandel.paisaaayo.ui.components.PrimaryButton
 import io.github.mkmanishkandel.paisaaayo.ui.history.HistoryScreen
 import io.github.mkmanishkandel.paisaaayo.ui.home.HomeScreen
@@ -53,6 +51,28 @@ import io.github.mkmanishkandel.paisaaayo.ui.theme.PaisaAayoTheme
 import io.github.mkmanishkandel.paisaaayo.ui.theme.Spacing
 import io.github.mkmanishkandel.paisaaayo.util.AppLanguage
 import kotlinx.coroutines.launch
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.rounded.Fingerprint
+import androidx.compose.material3.Icon
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
+import io.github.mkmanishkandel.paisaaayo.service.ListenerState
+import io.github.mkmanishkandel.paisaaayo.ui.components.HeroCoin
+import io.github.mkmanishkandel.paisaaayo.ui.components.LiveDot
+import io.github.mkmanishkandel.paisaaayo.ui.theme.LocalPaisaColors
 
 private object Routes {
     const val ONBOARDING = "onboarding"
@@ -201,16 +221,69 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+/**
+ * Shown while the app lock is on. Branded rather than a bare padlock: the speaking "रु" mark with
+ * a lock badge, why it's locked, and a live reminder that announcements keep working meanwhile.
+ */
 @Composable
 private fun LockScreen(onUnlock: () -> Unit) {
+    val paisa = LocalPaisaColors.current
+    val scheme = MaterialTheme.colorScheme
+    val listening by ListenerState.connected.collectAsStateWithLifecycle()
     Column(
-        Modifier.fillMaxSize().safeDrawingPadding().padding(Spacing.xl),
-        verticalArrangement = Arrangement.spacedBy(Spacing.lg, Alignment.CenterVertically),
+        Modifier
+            .fillMaxSize()
+            .background(Brush.verticalGradient(listOf(paisa.heroGradientTop, paisa.heroGradientBottom)))
+            .safeDrawingPadding()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = Spacing.xl, vertical = Spacing.lg),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        IconBadge(Icons.Rounded.Lock, MaterialTheme.colorScheme.onPrimaryContainer, MaterialTheme.colorScheme.primaryContainer, 72.dp)
-        Text(stringResource(R.string.lock_title), style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onSurface)
-        PrimaryButton(stringResource(R.string.lock_button), onUnlock)
+        Spacer(Modifier.weight(1f))
+        Box(contentAlignment = Alignment.BottomEnd) {
+            HeroCoin(size = 168.dp)
+            Box(
+                Modifier
+                    .padding(end = 22.dp, bottom = 22.dp)
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(scheme.primary)
+                    .border(4.dp, paisa.heroGradientTop, CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(Icons.Rounded.Lock, contentDescription = null, tint = scheme.onPrimary, modifier = Modifier.size(22.dp))
+            }
+        }
+        Spacer(Modifier.height(Spacing.lg))
+        Text(
+            stringResource(R.string.lock_title),
+            style = MaterialTheme.typography.headlineSmall,
+            color = scheme.onSurface,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.semantics { heading() },
+        )
+        Spacer(Modifier.height(Spacing.sm))
+        Text(
+            stringResource(R.string.lock_body),
+            style = MaterialTheme.typography.bodyLarge,
+            color = scheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
+        if (listening) {
+            Spacer(Modifier.height(Spacing.lg))
+            Row(
+                Modifier
+                    .clip(CircleShape)
+                    .background(paisa.creditContainer)
+                    .padding(horizontal = Spacing.md, vertical = Spacing.sm),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                LiveDot(paisa.credit)
+                Spacer(Modifier.width(Spacing.sm))
+                Text(stringResource(R.string.lock_still_listening), style = MaterialTheme.typography.labelLarge, color = paisa.credit)
+            }
+        }
+        Spacer(Modifier.weight(1f))
+        PrimaryButton(stringResource(R.string.lock_button), onUnlock, icon = Icons.Rounded.Fingerprint)
     }
 }
-

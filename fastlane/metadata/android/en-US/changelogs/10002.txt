@@ -1,0 +1,1 @@
+New look for the "Received today" card: solid gold with clearer, high-contrast text. Redesigned app lock screen that also shows payments are still being announced while the app is locked.

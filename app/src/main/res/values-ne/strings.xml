@@ -139,6 +139,8 @@
     <!-- Lock -->
     <string name="lock_title">पैसा आयो लक छ</string>
     <string name="lock_button">अनलक गर्नुहोस्</string>
+    <string name="lock_body">तपाईंको भुक्तानी इतिहास सुरक्षित छ। फिंगरप्रिन्ट, अनुहार वा स्क्रिन लकले खोल्नुहोस्।</string>
+    <string name="lock_still_listening">लक हुँदा पनि भुक्तानी सुनाइन्छ</string>
     <string name="lock_prompt_title">पैसा आयो अनलक गर्नुहोस्</string>
 
     <!-- Notifications -->

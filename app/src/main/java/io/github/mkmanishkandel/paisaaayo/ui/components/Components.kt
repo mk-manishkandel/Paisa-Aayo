@@ -70,10 +70,11 @@ fun PaisaCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     container: Color = MaterialTheme.colorScheme.surfaceContainer,
+    borderColor: Color = MaterialTheme.colorScheme.outlineVariant,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val colors = CardDefaults.cardColors(containerColor = container)
-    val border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+    val border = BorderStroke(1.dp, borderColor)
     if (onClick != null) {
         Card(onClick = onClick, modifier = modifier, shape = MaterialTheme.shapes.large, colors = colors, border = border, content = content)
     } else {
