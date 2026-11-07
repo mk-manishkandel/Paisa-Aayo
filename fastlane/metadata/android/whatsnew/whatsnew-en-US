@@ -1,1 +1,1 @@
-Choose which SMS senders are announced: Settings → Sources now lists bank and wallet SMS senders (for example NABIL_ALERT) as they arrive, and you can turn each one off. No SMS permission is needed. Cleaner "Listening for payments" status on the home screen and a quieter note on the lock screen.
+Design fixes: the "Received today" amount no longer breaks onto two lines in Nepali, tighter line spacing in settings, cleaner language buttons without the cramped tick mark, and a full-width fix button on the home screen when listening is off.

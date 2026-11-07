@@ -1,0 +1,1 @@
+Design fixes: the "Received today" amount no longer breaks onto two lines in Nepali, tighter line spacing in settings, cleaner language buttons without the cramped tick mark, and a full-width fix button on the home screen when listening is off.

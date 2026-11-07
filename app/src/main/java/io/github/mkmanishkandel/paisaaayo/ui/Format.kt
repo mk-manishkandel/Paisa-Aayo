@@ -10,7 +10,8 @@ import java.util.Locale
 object Format {
     fun amount(paisa: Long, nepali: Boolean): String {
         val prefix = if (nepali) "रु" else "Rs"
-        return "$prefix ${Money.format(paisa, devanagariDigits = nepali)}"
+        // Non-breaking space: "रु" and the number must never wrap onto separate lines.
+        return "$prefix\u00A0${Money.format(paisa, devanagariDigits = nepali)}"
     }
 
     fun number(value: Long, nepali: Boolean): String =
