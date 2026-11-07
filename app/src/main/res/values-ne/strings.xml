@@ -106,6 +106,10 @@
     <string name="settings_section_sources">स्रोतहरू</string>
     <string name="settings_read_sms">बैंक SMS पढ्ने</string>
     <string name="settings_read_sms_body">व्यक्तिगत नम्बरका सन्देश सधैं बेवास्ता गरिन्छन्।</string>
+    <string name="settings_sms_senders">SMS पठाउनेहरू</string>
+    <string name="settings_sms_senders_hint">कुनै पठाउनेको SMS सुनाउन नचाहे बन्द गर्नुहोस्।</string>
+    <string name="settings_sms_senders_empty">बैंक र वालेटका पठाउनेहरू पहिलो SMS आएपछि यहाँ देखिन्छन्।</string>
+    <string name="settings_apps">एपहरू</string>
     <string name="settings_sources_hint">पहिलो भुक्तानीपछि एपहरू यहाँ देखिन्छन्। सुनाउन नचाहेको एप बन्द गर्नुहोस्।</string>
     <string name="settings_section_reliability">भरपर्दोपन</string>
     <string name="settings_keep_alive">स्थायी सूचना</string>

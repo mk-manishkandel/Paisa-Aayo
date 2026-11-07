@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -71,7 +72,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import io.github.mkmanishkandel.paisaaayo.service.ListenerState
 import io.github.mkmanishkandel.paisaaayo.ui.components.HeroCoin
-import io.github.mkmanishkandel.paisaaayo.ui.components.LiveDot
 import io.github.mkmanishkandel.paisaaayo.ui.theme.LocalPaisaColors
 
 private object Routes {
@@ -269,21 +269,19 @@ private fun LockScreen(onUnlock: () -> Unit) {
             color = scheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
         )
+        Spacer(Modifier.weight(1f))
         if (listening) {
-            Spacer(Modifier.height(Spacing.lg))
-            Row(
-                Modifier
-                    .clip(CircleShape)
-                    .background(paisa.creditContainer)
-                    .padding(horizontal = Spacing.md, vertical = Spacing.sm),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                LiveDot(paisa.credit)
+            Row(Modifier.padding(bottom = Spacing.md), verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    Icons.AutoMirrored.Rounded.VolumeUp,
+                    contentDescription = null,
+                    tint = scheme.onSurfaceVariant,
+                    modifier = Modifier.size(18.dp),
+                )
                 Spacer(Modifier.width(Spacing.sm))
-                Text(stringResource(R.string.lock_still_listening), style = MaterialTheme.typography.labelLarge, color = paisa.credit)
+                Text(stringResource(R.string.lock_still_listening), style = MaterialTheme.typography.bodyMedium, color = scheme.onSurfaceVariant)
             }
         }
-        Spacer(Modifier.weight(1f))
         PrimaryButton(stringResource(R.string.lock_button), onUnlock, icon = Icons.Rounded.Fingerprint)
     }
 }

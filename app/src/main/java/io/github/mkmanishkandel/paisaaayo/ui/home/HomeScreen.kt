@@ -19,11 +19,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.automirrored.rounded.ReceiptLong
+import androidx.compose.material.icons.rounded.NotificationsOff
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -59,7 +63,6 @@ import io.github.mkmanishkandel.paisaaayo.service.TestPayment
 import io.github.mkmanishkandel.paisaaayo.ui.Format
 import io.github.mkmanishkandel.paisaaayo.ui.rememberStartOfToday
 import io.github.mkmanishkandel.paisaaayo.ui.components.EmptyState
-import io.github.mkmanishkandel.paisaaayo.ui.components.LiveDot
 import io.github.mkmanishkandel.paisaaayo.ui.components.PaisaCard
 import io.github.mkmanishkandel.paisaaayo.ui.components.PaymentRow
 import io.github.mkmanishkandel.paisaaayo.ui.components.PrimaryButton
@@ -169,10 +172,15 @@ fun HomeScreen(onOpenHistory: () -> Unit, onOpenSettings: () -> Unit) {
 @Composable
 private fun StatusCard(status: ListenStatus, onFix: () -> Unit) {
     val paisa = LocalPaisaColors.current
-    val (color, title, body) = when (status) {
-        ListenStatus.LISTENING -> Triple(paisa.credit, R.string.home_status_listening, R.string.home_status_listening_body)
-        ListenStatus.RECONNECTING -> Triple(paisa.accentText, R.string.home_status_reconnecting, R.string.home_status_reconnecting_body)
-        ListenStatus.OFF -> Triple(paisa.debit, R.string.home_status_off, R.string.home_status_off_body)
+    val (color, icon) = when (status) {
+        ListenStatus.LISTENING -> paisa.credit to Icons.AutoMirrored.Rounded.VolumeUp
+        ListenStatus.RECONNECTING -> paisa.accentText to Icons.Rounded.Sync
+        ListenStatus.OFF -> paisa.debit to Icons.Rounded.NotificationsOff
+    }
+    val (title, body) = when (status) {
+        ListenStatus.LISTENING -> R.string.home_status_listening to R.string.home_status_listening_body
+        ListenStatus.RECONNECTING -> R.string.home_status_reconnecting to R.string.home_status_reconnecting_body
+        ListenStatus.OFF -> R.string.home_status_off to R.string.home_status_off_body
     }
     PaisaCard {
         Row(
@@ -181,7 +189,12 @@ private fun StatusCard(status: ListenStatus, onFix: () -> Unit) {
                 .semantics { liveRegion = LiveRegionMode.Polite },
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            LiveDot(color)
+            Box(
+                Modifier.size(44.dp).clip(RoundedCornerShape(12.dp)).background(color.copy(alpha = 0.14f)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(24.dp))
+            }
             Spacer(Modifier.width(Spacing.md))
             Column(Modifier.weight(1f)) {
                 Text(stringResource(title), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)

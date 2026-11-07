@@ -177,6 +177,20 @@ object PaymentParser {
         return ParseResult.Payment(amount, direction, extractReference(body))
     }
 
+    /**
+     * The business sender of an SMS notification (e.g. "NABIL_ALERT" or "31001"), or null when the
+     * notification isn't an SMS or comes from a personal number, contact name or blocked sender.
+     * Used to let the shopkeeper switch individual SMS senders on and off.
+     */
+    fun smsSender(input: NotificationInput): String? {
+        if (!Sources.isSmsApp(input.packageName)) return null
+        val senders = (listOf(input.title) + input.senders).map(::normalize).filter { it.isNotEmpty() }
+        if (senders.isEmpty() || senders.any { isBlockedSender(it) || isPersonalSender(it) }) return null
+        return senders.first().take(MAX_SENDER_LENGTH)
+    }
+
+    private const val MAX_SENDER_LENGTH = 40
+
     // ---------- helpers (internal for tests) ----------
 
     internal fun normalize(text: String): String =

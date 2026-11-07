@@ -112,6 +112,12 @@ class PaymentListenerService : NotificationListenerService() {
         val isTest = snapshot.packageName == packageName
         if (isTest && snapshot.tag != TestPayment.TAG) return // our own keep-alive etc.
         if (!isTest && !isSourceAllowed(snapshot.packageName, settings)) return
+        if (!isTest && !snapshot.redacted) {
+            PaymentParser.smsSender(snapshot.input)?.let { sender ->
+                if (sender !in settings.smsSenders) container.settings.recordSmsSender(sender)
+                if (sender in settings.mutedSmsSenders) return
+            }
+        }
         if (snapshot.redacted) {
             if (!isTest) noteHidden(snapshot)
             return
