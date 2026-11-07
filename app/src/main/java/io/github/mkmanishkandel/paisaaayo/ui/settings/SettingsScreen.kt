@@ -73,6 +73,7 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.mkmanishkandel.paisaaayo.BuildConfig
 import io.github.mkmanishkandel.paisaaayo.R
+import io.github.mkmanishkandel.paisaaayo.parser.Sources
 import io.github.mkmanishkandel.paisaaayo.container
 import io.github.mkmanishkandel.paisaaayo.data.Settings
 import io.github.mkmanishkandel.paisaaayo.data.SpeechLanguageSetting
@@ -185,8 +186,23 @@ fun SettingsScreen(
                     SwitchRow(Icons.Rounded.Sms, stringResource(R.string.settings_read_sms), stringResource(R.string.settings_read_sms_body), settings.readSms) {
                         scope.launch { repo.setReadSms(it) }
                     }
+                    if (settings.readSms) {
+                        Label(stringResource(R.string.settings_sms_senders))
+                        if (settings.smsSenders.isEmpty()) {
+                            Hint(stringResource(R.string.settings_sms_senders_empty))
+                        } else {
+                            Hint(stringResource(R.string.settings_sms_senders_hint))
+                            settings.smsSenders.sortedBy { it.lowercase() }.forEach { sender ->
+                                SwitchRow(Icons.Rounded.Sms, sender, null, sender !in settings.mutedSmsSenders) { on ->
+                                    scope.launch { repo.setSmsSenderMuted(sender, !on) }
+                                }
+                            }
+                        }
+                    }
+                    Label(stringResource(R.string.settings_apps))
                     Hint(stringResource(R.string.settings_sources_hint))
-                    sources.forEach { source ->
+                    // SMS are chosen per sender above, so the messaging app itself isn't listed here.
+                    sources.filterNot { Sources.isSmsApp(it.packageName) }.forEach { source ->
                         SwitchRow(Icons.Rounded.Apps, source.sourceLabel, null, source.packageName !in settings.mutedPackages) { on ->
                             scope.launch { repo.setPackageMuted(source.packageName, !on) }
                         }
@@ -261,7 +277,10 @@ fun SettingsScreen(
             confirmButton = {
                 TextButton(onClick = {
                     confirmClear = false
-                    scope.launch { dao.deleteAll() }
+                    scope.launch {
+                        dao.deleteAll()
+                        repo.clearSmsSenders()
+                    }
                 }) { Text(stringResource(R.string.action_delete), color = LocalPaisaColors.current.debit) }
             },
             dismissButton = {

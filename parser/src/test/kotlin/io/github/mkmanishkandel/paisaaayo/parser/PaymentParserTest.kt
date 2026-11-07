@@ -131,4 +131,22 @@ class PaymentParserTest {
         assertEquals("9812345678", PaymentParser.phoneDigits("009779812345678"))
         assertNull(PaymentParser.phoneDigits("NABIL"))
     }
+
+    // ---- SMS sender picker ----
+
+    private fun sender(title: String, pkg: String = "com.google.android.apps.messaging", senders: List<String> = emptyList()) =
+        PaymentParser.smsSender(NotificationInput(pkg, title, "Rs 500 credited", senders))
+
+    @Test fun smsSenderBusiness() {
+        assertEquals("NABIL_ALERT", sender(" NABIL_ALERT "))
+        assertEquals("31001", sender("31001"))
+    }
+
+    @Test fun smsSenderSkipsPeopleAndNonSms() {
+        assertNull(sender("9812345678"))
+        assertNull(sender("NABIL", senders = listOf("+977 9812345678")))
+        assertNull(sender("Ram Bahadur"))
+        assertNull(sender(""))
+        assertNull(sender("eSewa", pkg = "com.f1soft.esewa"))
+    }
 }

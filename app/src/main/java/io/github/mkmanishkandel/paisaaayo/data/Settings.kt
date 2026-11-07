@@ -32,6 +32,9 @@ data class Settings(
     val keepAliveNotification: Boolean = true,
     val readSms: Boolean = true,
     val mutedPackages: Set<String> = emptySet(),
+    /** Business SMS senders (e.g. "NABIL_ALERT") seen since install, for the picker in Settings. */
+    val smsSenders: Set<String> = emptySet(),
+    val mutedSmsSenders: Set<String> = emptySet(),
     val retentionDays: Int = 90,
     val appLock: Boolean = false,
     /** Last notification from a payment app that Android hid from us (see NotificationExtractor). */
@@ -59,6 +62,8 @@ class SettingsRepository(private val context: Context) {
         val keepAlive = booleanPreferencesKey("keep_alive_notification")
         val readSms = booleanPreferencesKey("read_sms")
         val mutedPackages = stringSetPreferencesKey("muted_packages")
+        val smsSenders = stringSetPreferencesKey("sms_senders")
+        val mutedSmsSenders = stringSetPreferencesKey("muted_sms_senders")
         val retentionDays = intPreferencesKey("retention_days")
         val appLock = booleanPreferencesKey("app_lock")
         val lastHiddenSource = stringPreferencesKey("last_hidden_source")
@@ -84,6 +89,8 @@ class SettingsRepository(private val context: Context) {
             keepAliveNotification = p[Keys.keepAlive] ?: defaults.keepAliveNotification,
             readSms = p[Keys.readSms] ?: defaults.readSms,
             mutedPackages = p[Keys.mutedPackages] ?: defaults.mutedPackages,
+            smsSenders = p[Keys.smsSenders] ?: defaults.smsSenders,
+            mutedSmsSenders = p[Keys.mutedSmsSenders] ?: defaults.mutedSmsSenders,
             retentionDays = p[Keys.retentionDays] ?: defaults.retentionDays,
             appLock = p[Keys.appLock] ?: defaults.appLock,
             lastHiddenSource = p[Keys.lastHiddenSource] ?: defaults.lastHiddenSource,
@@ -113,5 +120,26 @@ class SettingsRepository(private val context: Context) {
     suspend fun setPackageMuted(packageName: String, muted: Boolean) = context.dataStore.edit {
         val current = it[Keys.mutedPackages] ?: emptySet()
         it[Keys.mutedPackages] = if (muted) current + packageName else current - packageName
+    }
+
+    /** Remembers a business SMS sender. The list is capped so a flood of promo senders can't grow it forever. */
+    suspend fun recordSmsSender(sender: String) = context.dataStore.edit {
+        val current = it[Keys.smsSenders] ?: emptySet()
+        if (sender in current || current.size >= MAX_SMS_SENDERS) return@edit
+        it[Keys.smsSenders] = current + sender
+    }
+
+    suspend fun setSmsSenderMuted(sender: String, muted: Boolean) = context.dataStore.edit {
+        val current = it[Keys.mutedSmsSenders] ?: emptySet()
+        it[Keys.mutedSmsSenders] = if (muted) current + sender else current - sender
+    }
+
+    /** Forgets remembered senders, keeping the ones the shopkeeper turned off. */
+    suspend fun clearSmsSenders() = context.dataStore.edit {
+        it[Keys.smsSenders] = it[Keys.mutedSmsSenders] ?: emptySet()
+    }
+
+    private companion object {
+        const val MAX_SMS_SENDERS = 50
     }
 }

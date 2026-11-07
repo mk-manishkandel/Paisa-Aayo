@@ -2,7 +2,6 @@ package io.github.mkmanishkandel.paisaaayo.ui.components
 
 import androidx.compose.ui.res.painterResource
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -143,24 +142,6 @@ fun IconBadge(icon: ImageVector, tint: Color, background: Color, size: Dp = 44.d
         contentAlignment = Alignment.Center,
     ) {
         Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(size * 0.5f))
-    }
-}
-
-/** A soft pulsing dot that signals "live". Static when reduced motion is on. */
-@Composable
-fun LiveDot(color: Color, modifier: Modifier = Modifier) {
-    val reduced = LocalReducedMotion.current
-    val transition = rememberInfiniteTransition(label = "live")
-    val pulse by transition.animateFloat(
-        initialValue = 0f,
-        targetValue = if (reduced) 0f else 1f,
-        animationSpec = infiniteRepeatable(tween(1600, easing = LinearEasing), RepeatMode.Restart),
-        label = "pulse",
-    )
-    Canvas(modifier.size(14.dp)) {
-        val r = size.minDimension / 2
-        if (!reduced) drawCircle(color.copy(alpha = (1f - pulse) * 0.45f), radius = r * (0.5f + pulse * 0.5f))
-        drawCircle(color, radius = r * 0.45f)
     }
 }
 

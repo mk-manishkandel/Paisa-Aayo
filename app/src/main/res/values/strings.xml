@@ -110,6 +110,10 @@
     <string name="settings_section_sources">Sources</string>
     <string name="settings_read_sms">Read bank SMS</string>
     <string name="settings_read_sms_body">Messages from personal numbers are always ignored.</string>
+    <string name="settings_sms_senders">SMS senders</string>
+    <string name="settings_sms_senders_hint">Turn a sender off to stop announcing its SMS.</string>
+    <string name="settings_sms_senders_empty">Bank and wallet senders appear here after their first SMS arrives.</string>
+    <string name="settings_apps">Apps</string>
     <string name="settings_sources_hint">Apps appear here after their first payment. Turn one off to stop announcing it.</string>
     <string name="settings_section_reliability">Reliability</string>
     <string name="settings_keep_alive">Persistent notification</string>

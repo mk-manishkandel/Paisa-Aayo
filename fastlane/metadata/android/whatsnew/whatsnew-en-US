@@ -1,1 +1,1 @@
-New look for the "Received today" card: solid gold with clearer, high-contrast text. Redesigned app lock screen that also shows payments are still being announced while the app is locked.
+Choose which SMS senders are announced: Settings → Sources now lists bank and wallet SMS senders (for example NABIL_ALERT) as they arrive, and you can turn each one off. No SMS permission is needed. Cleaner "Listening for payments" status on the home screen and a quieter note on the lock screen.

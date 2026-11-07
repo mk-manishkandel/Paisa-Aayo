@@ -1,6 +1,6 @@
 # Privacy policy: Paisa Aayo
 
-**Effective date:** 6 November 2026
+**Effective date:** 7 November 2026
 **App:** Paisa Aayo: Payment Speaker (`io.github.mkmanishkandel.paisaaayo`)
 **Developer:** Manish Kandel ([hello@manishkandel.com.np](mailto:hello@manishkandel.com.np))
 
@@ -27,6 +27,10 @@ app's name, the reference number and the time**. The full notification text is n
 When Android hides a payment app's notification content (Android 15 and later), only that app's
 name and the time are kept, to show you a reminder.
 
+If *Read bank SMS* is on, the app also remembers the **sender IDs of business SMS** it has seen
+(for example `NABIL_ALERT` or `31001`), up to 50, so you can turn individual senders off in
+*Settings → Sources*. Phone numbers and contact names are never stored, and no SMS text is kept.
+
 This data is kept in the app's private storage on your phone. Android cloud backup and
 device-to-device transfer are disabled for it, so it is not copied to Google or to other devices.
 Nobody, including the developer, can see it.
@@ -34,7 +38,7 @@ Nobody, including the developer, can see it.
 ## How long it is kept, and how to delete it
 
 Payments are kept for 30, 90 (default) or 365 days, as you choose in *Settings*. Older records are
-deleted automatically. *Settings → Clear history* deletes everything immediately, and uninstalling
+deleted automatically. *Settings → Clear history* deletes all payments and remembered SMS senders immediately, and uninstalling
 the app deletes all of its data.
 
 ## Permissions
