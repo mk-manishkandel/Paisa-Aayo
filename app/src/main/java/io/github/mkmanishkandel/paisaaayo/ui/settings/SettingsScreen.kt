@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -68,6 +69,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -336,8 +338,18 @@ private fun Segmented(options: List<String>, selected: Int, onSelect: (Int) -> U
                     activeContainerColor = MaterialTheme.colorScheme.primary,
                     activeContentColor = MaterialTheme.colorScheme.onPrimary,
                 ),
+                // No check mark: the gold fill already shows the choice, and the icon crowded the
+                // label against the rounded edge ("✓ Same as app").
+                icon = {},
                 modifier = Modifier.heightIn(min = 48.dp),
-            ) { Text(label, style = MaterialTheme.typography.labelMedium, maxLines = 1) }
+            ) {
+                Text(
+                    label,
+                    style = MaterialTheme.typography.labelMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }
@@ -363,9 +375,12 @@ private fun SwitchRow(
         Spacer(Modifier.width(Spacing.md))
         Column(Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
-            if (body != null) Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (body != null) {
+                Spacer(Modifier.height(2.dp))
+                Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
-        Spacer(Modifier.width(Spacing.sm))
+        Spacer(Modifier.width(Spacing.md))
         Switch(checked = checked, onCheckedChange = null, enabled = enabled)
     }
 }
@@ -398,6 +413,7 @@ private fun NavRow(
         Column(Modifier.weight(1f)) {
             Text(title, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.onSurface)
             if (value != null) {
+                Spacer(Modifier.height(2.dp))
                 Text(value, style = MaterialTheme.typography.bodySmall, color = if (warn) paisa.debit else MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }

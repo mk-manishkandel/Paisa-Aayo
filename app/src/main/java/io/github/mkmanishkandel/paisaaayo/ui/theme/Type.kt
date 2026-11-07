@@ -36,7 +36,9 @@ fun paisaTypography(nepali: Boolean): Typography {
         fontWeight = weight,
         fontSize = size.sp,
         lineHeight = (line * lh).sp,
-        letterSpacing = tracking.em,
+        // Devanagari is never tracked: negative spacing breaks its shaping (glyphs dropped or
+        // wrapped, e.g. "रु ५२२" drawn as "रु ५२").
+        letterSpacing = if (nepali) 0.em else tracking.em,
     )
     return Typography(
         displayLarge = style(44, 52, FontWeight.Bold, -0.02),
@@ -48,9 +50,9 @@ fun paisaTypography(nepali: Boolean): Typography {
         titleLarge = style(20, 28, FontWeight.SemiBold),
         titleMedium = style(16, 24, FontWeight.SemiBold),
         titleSmall = style(14, 20, FontWeight.Medium),
-        bodyLarge = style(16, 24, FontWeight.Normal),
-        bodyMedium = style(14, 21, FontWeight.Normal),
-        bodySmall = style(13, 19, FontWeight.Normal),
+        bodyLarge = style(16, 22, FontWeight.Normal),
+        bodyMedium = style(14, 20, FontWeight.Normal),
+        bodySmall = style(13, 18, FontWeight.Normal),
         labelLarge = style(15, 20, FontWeight.SemiBold, 0.01),
         labelMedium = style(13, 18, FontWeight.Medium, 0.01),
         labelSmall = style(12, 16, FontWeight.Medium, 0.02),

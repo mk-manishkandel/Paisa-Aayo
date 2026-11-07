@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.draw.clip
 import androidx.compose.material.icons.Icons
@@ -53,6 +55,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.github.mkmanishkandel.paisaaayo.R
@@ -183,12 +186,8 @@ private fun StatusCard(status: ListenStatus, onFix: () -> Unit) {
         ListenStatus.OFF -> R.string.home_status_off to R.string.home_status_off_body
     }
     PaisaCard {
-        Row(
-            Modifier
-                .padding(Spacing.lg)
-                .semantics { liveRegion = LiveRegionMode.Polite },
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+        Column(Modifier.padding(Spacing.lg).semantics { liveRegion = LiveRegionMode.Polite }) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
                 Modifier.size(44.dp).clip(RoundedCornerShape(12.dp)).background(color.copy(alpha = 0.14f)),
                 contentAlignment = Alignment.Center,
@@ -198,12 +197,15 @@ private fun StatusCard(status: ListenStatus, onFix: () -> Unit) {
             Spacer(Modifier.width(Spacing.md))
             Column(Modifier.weight(1f)) {
                 Text(stringResource(title), style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurface)
+                Spacer(Modifier.height(2.dp))
                 Text(stringResource(body), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            if (status != ListenStatus.LISTENING) {
-                Spacer(Modifier.width(Spacing.sm))
-                PrimaryButton(stringResource(R.string.home_fix), onFix, modifier = Modifier.width(112.dp))
-            }
+        }
+        // Full-width under the text, so long Nepali labels ("मिलाउनुहोस्") never wrap.
+        if (status != ListenStatus.LISTENING) {
+            Spacer(Modifier.height(Spacing.md))
+            PrimaryButton(stringResource(R.string.home_fix), onFix)
+        }
         }
     }
 }
@@ -275,6 +277,9 @@ private fun TodayCard(totalPaisa: Long, count: Int, onTest: () -> Unit) {
                     style = MaterialTheme.typography.displayMedium.tabular,
                     fontWeight = FontWeight.Bold,
                     color = ink,
+                    maxLines = 1,
+                    // Big totals shrink to fit instead of wrapping.
+                    autoSize = TextAutoSize.StepBased(minFontSize = 22.sp, maxFontSize = 36.sp),
                 )
                 Text(
                     pluralStringResource(R.plurals.payments_count, count, Format.number(count.toLong(), nepali)),
